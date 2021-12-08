@@ -1,35 +1,35 @@
-import AccessibilityButton from "components/AccessibilityButton";
-import { useState } from "react";
+import AccessibilityButton from "components/AccessibilityButton"
+import { useState } from "react"
 
 export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [isTextToSpeech, setIsTextToSpeech] = useState(false);
-  const [isHighlighted, setIsHighlighted] = useState(false);
-  const [isHighContrast, setIsHighContrast] = useState(false);
-  console.log(isDarkMode);
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isTextToSpeech, setIsTextToSpeech] = useState(false)
+  const [isHighlighted, setIsHighlighted] = useState(false)
+  const [isHighContrast, setIsHighContrast] = useState(false)
+  console.log(isDarkMode)
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-500">
+    <div className="flex items-center justify-center min-h-screen bg-gray-500">
       <div className="w-full max-w-3xl">
-        <div className="bg-white shadow-md rounded pb-8">
+        <div className="pb-8 bg-white rounded shadow-md">
           <div className="mb-4">
-            <h1 className="text-2xl font-bold text-center text-white bg-gray-800 px-2 py-4">
+            <h1 className="px-2 py-4 text-2xl font-bold text-center text-white bg-gray-800">
               Calculadora de accesibilidad
             </h1>
           </div>
           <div className="flex">
-            <div className="mb-4 flex">
-              <div className="flex flex-1 flex-col px-8">
-                <div className="text-gray-700 text-base mb-4">
-                  <span className="font-bold text-lg">
+            <div className="flex mb-4">
+              <div className="flex flex-col flex-1 px-8">
+                <div className="mb-4 text-base text-gray-700">
+                  <span className="text-lg font-bold">
                     Ajustes de la fuente
                   </span>
                   <br />
-                  <span className="text-gray-500 font-semibold">
+                  <span className="font-semibold text-gray-500">
                     Selecciona el tamaño de la fuente
                   </span>
                   <div className="flex mt-2">
-                    <p className="text-gray-700 text-lg font-bold">10%</p>
+                    <p className="text-lg font-bold text-gray-700">10%</p>
                     <input
                       type="range"
                       min="10"
@@ -38,13 +38,13 @@ export default function Home() {
                       className="w-full mx-4"
                       step="5"
                     />
-                    <p className="text-gray-700 text-lg font-bold">50%</p>
+                    <p className="text-lg font-bold text-gray-700">50%</p>
                   </div>
                 </div>
-                <div className="text-gray-700 text-base">
-                  <span className="font-bold text-lg">Ajustes de estilos</span>
+                <div className="text-base text-gray-700">
+                  <span className="text-lg font-bold">Ajustes de estilos</span>
                   <br />
-                  <span className="text-gray-500 font-semibold">
+                  <span className="font-semibold text-gray-500">
                     Selecciona los estilos
                   </span>
                   <div className="grid grid-cols-2 gap-6 mt-2">
@@ -76,11 +76,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-1 px-8">
-                <div className="text-gray-700 text-base">
-                  <h1 className="font-bold text-2xl">H1 Título</h1>
-                  <h2 className="font-bold text-xl">H2 Título</h2>
-                  <h3 className="font-bold text-lg">H3 Título</h3>
-                  <p className="font-bold text-sm">
+                <div className="text-base text-gray-700">
+                  <h1 className="text-2xl font-bold">H1 Título</h1>
+                  <h2 className="text-xl font-bold">H2 Título</h2>
+                  <h3 className="text-lg font-bold">H3 Título</h3>
+                  <p className="text-sm font-bold">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Aliquam consectetur ipsum id ligula tincidunt, ut hendrerit
                     libero commodo. Suspendisse malesuada quam ac tempor
@@ -100,5 +100,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }

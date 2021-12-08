@@ -1,4 +1,4 @@
-import Toggle from "ui/Toggle";
+import Toggle from "ui/Toggle"
 
 export default function AccessibilityButton({
   isActive,
@@ -17,5 +17,5 @@ export default function AccessibilityButton({
       <span className="text-lg">{label}</span>
       <span className="material-icons">{iconName}</span>
     </button>
-  );
+  )
 }

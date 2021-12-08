@@ -3,7 +3,7 @@ export default function Toggle({ isActive, name }) {
     <div className="flex items-center justify-center">
       <input type="checkbox" name={name} className="hidden" />
       <label
-        className="relative w-12 h-6 flex select-none cursor-pointer"
+        className="relative flex w-12 h-6 cursor-pointer select-none"
         htmlFor="toggle"
       >
         <span
@@ -18,5 +18,5 @@ export default function Toggle({ isActive, name }) {
         ></span>
       </label>
     </div>
-  );
+  )
 }
