@@ -1,12 +1,14 @@
 import AccessibilityButton from "components/AccessibilityButton"
-import { useState } from "react"
+import { useState, useRef } from "react"
+import { useTextToSpeech } from "../hooks/useTextToSpeech"
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const [isTextToSpeech, setIsTextToSpeech] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
   console.log(isDarkMode)
+  const textRef = useRef("")
+  const { isTextToSpeech, handleSpeak } = useTextToSpeech()
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-500">
@@ -56,7 +58,7 @@ export default function Home() {
                     />
                     <AccessibilityButton
                       isActive={isTextToSpeech}
-                      onClick={() => setIsTextToSpeech(!isTextToSpeech)}
+                      onClick={() => handleSpeak(textRef.current.textContent)}
                       label="Texto a voz"
                       iconName="volume_up"
                     />
@@ -80,18 +82,10 @@ export default function Home() {
                   <h1 className="text-2xl font-bold">H1 Título</h1>
                   <h2 className="text-xl font-bold">H2 Título</h2>
                   <h3 className="text-lg font-bold">H3 Título</h3>
-                  <p className="text-sm font-bold">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam consectetur ipsum id ligula tincidunt, ut hendrerit
-                    libero commodo. Suspendisse malesuada quam ac tempor
-                    lacinia. Vestibulum varius sed nulla sit amet tempus. Donec
-                    vehicula rhoncus dapibus. Etiam ultrices ac urna non
-                    molestie. Quisque porta condimentum ligula eget tincidunt.
-                    Sed vel erat turpis. Nullam feugiat luctus nibh vel
-                    malesuada. In hac habitasse platea dictumst. Integer quis
-                    fermentum nisi, non convallis tortor. Fusce sed justo purus.
-                    Phasellus accumsan auctor laoreet. Aliquam sollicitudin
-                    suscipit libero in hendrerit. Morbi eget risus quam.
+                  <p className="text-sm font-bold" ref={textRef}>
+                    Digitaliza la gestión completa de tu clínica. Páginas de
+                    presentación, sistema de citas, de planes personalizados y
+                    mucho más.
                   </p>
                 </div>
               </div>
