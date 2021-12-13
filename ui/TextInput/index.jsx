@@ -6,7 +6,7 @@ export default function TextInput({
   errors,
 }) {
   return (
-    <div className="w-full px-3 mb-4">
+    <div className="w-full px-3">
       <div className="grid grid-cols-2 mb-2">
         <label
           className="flex items-center py-2 text-xs font-bold text-gray-700 uppercase select-none"

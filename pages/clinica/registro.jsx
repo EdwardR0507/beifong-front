@@ -4,6 +4,7 @@ import TextInput from "ui/TextInput"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import { clinicRegisterSchema } from "schemas/clinica/registro"
 import Button from "ui/Button"
+import ExampleUI from "ui/ExampleUI"
 
 export default function RegistroClinicaIndex() {
   const {
@@ -40,36 +41,38 @@ export default function RegistroClinicaIndex() {
             <h1 className="mb-6 text-2xl font-bold text-center text-gray-900 ">
               Registro de clínica
             </h1>
-            <TextInput
-              name="name"
-              label="Nombre de la clínica"
-              register={register}
-              errors={errors?.name}
-            />
-            <TextInput
-              name="phone"
-              label="Teléfono"
-              register={register}
-              errors={errors?.phone}
-            />
-            <TextInput
-              name="address"
-              label="Dirección"
-              register={register}
-              errors={errors?.address}
-            />
-            <TextInput
-              name="email"
-              label="Correo electrónico"
-              register={register}
-              errors={errors?.email}
-            />
-            <TextInput
-              name="password"
-              label="Contraseña"
-              register={register}
-              errors={errors?.password}
-            />
+            <div className="grid grid-cols-1 gap-4 mb-8">
+              <TextInput
+                name="name"
+                label="Nombre de la clínica"
+                register={register}
+                errors={errors?.name}
+              />
+              <TextInput
+                name="phone"
+                label="Teléfono"
+                register={register}
+                errors={errors?.phone}
+              />
+              <TextInput
+                name="address"
+                label="Dirección"
+                register={register}
+                errors={errors?.address}
+              />
+              <TextInput
+                name="email"
+                label="Correo electrónico"
+                register={register}
+                errors={errors?.email}
+              />
+              <TextInput
+                name="password"
+                label="Contraseña"
+                register={register}
+                errors={errors?.password}
+              />
+            </div>
             <Button variant="primary" type="submit">
               Registrar clínica
             </Button>
@@ -77,13 +80,8 @@ export default function RegistroClinicaIndex() {
         </div>
       </div>
       <div className="flex-col items-center justify-center flex-1 hidden w-full p-4 md:flex bg-sky-500">
-        <h1 className="max-w-md text-2xl font-bold text-gray-900 rounded shadow-lg bg-sky-200 p-36">
-          Muestra de UI
-        </h1>
-        <p className="max-w-md mt-8 text-lg font-medium text-white">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-          consectetur orci sed cursus pharetra.
-        </p>
+        <ExampleUI.Box />
+        <ExampleUI.Text />
         <div className="py-6 mt-10 rounded px-14 bg-sky-50">
           <p className="w-full font-medium text-center text-gray-700">
             ¿Ya tienes una clínica registrada?{" "}
