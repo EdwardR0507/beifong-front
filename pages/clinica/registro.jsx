@@ -8,7 +8,7 @@ import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
 import Link from "ui/Link"
 
-export default function RegistroClinicaIndex() {
+export default function RegistroClinica() {
   const {
     register,
     handleSubmit,
@@ -32,7 +32,7 @@ export default function RegistroClinicaIndex() {
           <div className="w-full ">
             <Image
               onClick={() => {
-                router.push("/home")
+                router.push("/")
               }}
               className="pt-4 pl-10 cursor-pointer"
               src="/images/logo-beifong.png"
@@ -96,8 +96,8 @@ export default function RegistroClinicaIndex() {
           </p>
           <p className="w-full font-medium text-center text-gray-700">
             ¿Eres un paciente?{" "}
-            <Link to="/cliente/registro" variant="secondary">
-              Registrarse como cliente
+            <Link to="/paciente/registro" variant="secondary">
+              Registrarse como paciente
             </Link>
           </p>
         </div>

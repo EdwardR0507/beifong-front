@@ -8,7 +8,7 @@ import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { loginSchema } from "schemas/login"
 
-export default function LoginClinica() {
+export default function LoginPaciente() {
   const {
     register,
     handleSubmit,
@@ -46,7 +46,7 @@ export default function LoginClinica() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <h1 className="mb-6 text-2xl font-bold text-center text-gray-900 ">
-              Inicio de sesión de clínica
+              Inicio de sesión de paciente
             </h1>
             <div className="grid grid-cols-1 gap-4 mb-8">
               <TextInput
@@ -68,13 +68,13 @@ export default function LoginClinica() {
           </form>
           <div className="py-6 mt-10 bg-white rounded shadow-lg px-14">
             <p className="w-full mb-4 font-medium text-center text-gray-700">
-              ¿Tu clínica no está registrada?{" "}
-              <Link to="/clinica/registro">Regístrala</Link>
+              ¿Aún no tienes una cuenta?{" "}
+              <Link to="/paciente/registro">Regístrala</Link>
             </p>
             <p className="w-full font-medium text-center text-gray-700">
-              ¿Eres un paciente?{" "}
-              <Link to="/paciente/registro" variant="secondary">
-                Registrarse como cliente
+              ¿Eres una clínica?{" "}
+              <Link to="/clinica/registro" variant="secondary">
+                Regístrate como clínica
               </Link>
             </p>
           </div>

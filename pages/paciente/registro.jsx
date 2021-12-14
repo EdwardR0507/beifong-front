@@ -6,15 +6,15 @@ import Button from "ui/Button"
 import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
 import Link from "ui/Link"
-import { loginSchema } from "schemas/login"
+import { patientRegisterSchema } from "schemas/cliente/registro"
 
-export default function LoginClinica() {
+export default function RegistroPaciente() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(patientRegisterSchema),
   })
 
   const router = useRouter()
@@ -46,9 +46,15 @@ export default function LoginClinica() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <h1 className="mb-6 text-2xl font-bold text-center text-gray-900 ">
-              Inicio de sesión de clínica
+              Registro de paciente
             </h1>
             <div className="grid grid-cols-1 gap-4 mb-8">
+              <TextInput
+                name="name"
+                label="Nombre"
+                register={register}
+                errors={errors?.name}
+              />
               <TextInput
                 name="email"
                 label="Correo electrónico"
@@ -63,18 +69,18 @@ export default function LoginClinica() {
               />
             </div>
             <Button variant="primary" type="submit">
-              Iniciar sesión
+              Registrarse
             </Button>
           </form>
           <div className="py-6 mt-10 bg-white rounded shadow-lg px-14">
             <p className="w-full mb-4 font-medium text-center text-gray-700">
-              ¿Tu clínica no está registrada?{" "}
-              <Link to="/clinica/registro">Regístrala</Link>
+              ¿Ya tienes una cuenta registrada?{" "}
+              <Link to="/paciente/login">Iniciar Sesión</Link>
             </p>
             <p className="w-full font-medium text-center text-gray-700">
-              ¿Eres un paciente?{" "}
-              <Link to="/paciente/registro" variant="secondary">
-                Registrarse como cliente
+              ¿Eres una clínica?{" "}
+              <Link to="/clinica/registro" variant="secondary">
+                Registrarse como clínica
               </Link>
             </p>
           </div>

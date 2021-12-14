@@ -16,7 +16,7 @@ export default function Link({
   return (
     <NextLink href={to}>
       <a
-        className={` hover:underline hover:decoration-4 transition ${styles[newVariant]} underline-offset-4`}
+        className={` hover:underline hover:decoration-2 transition ${styles[newVariant]} underline-offset-4`}
       >
         {children}
       </a>
