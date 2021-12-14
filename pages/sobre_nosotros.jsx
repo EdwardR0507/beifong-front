@@ -1,10 +1,9 @@
 import Image from "next/image"
 import { useRouter } from "next/router"
 import Button from "ui/Button"
-import ExampleUI from "ui/ExampleUI"
 import Link from "ui/Link"
 
-export default function Home() {
+export default function SobreNosotros() {
   const router = useRouter()
 
   return (
@@ -61,36 +60,7 @@ export default function Home() {
         </div>
       </header>
       <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50">
-        <section className="flex items-center justify-center flex-1">
-          <div className="flex flex-col justify-center flex-1 w-1/2 px-16">
-            <h1 className="flex flex-col text-4xl font-bold leading-tight">
-              Construimos páginas de clínicas oftalmológicas
-              <span className="text-orange-400">
-                orientadas a la <br /> accesibilidad.
-              </span>
-            </h1>
-            <p className="my-10 text-lg font-medium text-slate-700 lg:text-xl">
-              Digitaliza la gestión completa de tu clínica.
-              <br />
-              Páginas de Presentación, sistema de citas, de planes
-              <br />
-              personalizados y mucho más.
-              <br />
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 place-content-center">
-              <Button variant="primary" size="large">
-                Ver suscripciones
-              </Button>
-              <Button variant="outline_primary" size="large">
-                Prueba nuestro widget
-              </Button>
-            </div>
-          </div>
-          <div className="flex items-center justify-center flex-1">
-            <ExampleUI.Box size="large" />
-          </div>
-        </section>
+        <h1 className="text-3xl font-semibold text-center">Sobre Nosotros</h1>
       </main>
     </div>
   )

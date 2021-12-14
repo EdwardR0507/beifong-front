@@ -3,7 +3,7 @@ const styles = {
   primary:
     "bg-sky-500 text-white shadow-lg hover:shadow-sky-800/50 shadow-sky-500/40  hover:bg-sky-700",
   outline_primary:
-    "border-2 border-sky-500 text-sky-500 shadow-lg hover:shadow-sky-700/40 hover:bg-sky-100 shadow-sky-500/40",
+    "border-2 border-sky-500 text-sky-500 shadow-lg hover:shadow-sky-700/20 hover:bg-sky-100 shadow-sky-500/20",
   secondary:
     "bg-emerald-500 text-white shadow-lg hover:shadow-emerald-800/50 shadow-emerald-500/40 hover:bg-emerald-700",
   tertiary:

@@ -5,6 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import { clinicRegisterSchema } from "schemas/clinica/registro"
 import Button from "ui/Button"
 import ExampleUI from "ui/ExampleUI"
+import { useRouter } from "next/router"
+import Link from "ui/Link"
 
 export default function RegistroClinicaIndex() {
   const {
@@ -14,6 +16,8 @@ export default function RegistroClinicaIndex() {
   } = useForm({
     resolver: yupResolver(clinicRegisterSchema),
   })
+
+  const router = useRouter()
 
   const onSubmit = (data) => {
     console.log(data)
@@ -27,7 +31,10 @@ export default function RegistroClinicaIndex() {
         <div className="flex flex-col items-center w-full">
           <div className="w-full ">
             <Image
-              className="pt-4 pl-10"
+              onClick={() => {
+                router.push("/home")
+              }}
+              className="pt-4 pl-10 cursor-pointer"
               src="/images/logo-beifong.png"
               width={145}
               height={46}
@@ -83,23 +90,15 @@ export default function RegistroClinicaIndex() {
         <ExampleUI.Box />
         <ExampleUI.Text />
         <div className="py-6 mt-10 rounded px-14 bg-sky-50">
-          <p className="w-full font-medium text-center text-gray-700">
+          <p className="w-full mb-4 font-medium text-center text-gray-700">
             ¿Ya tienes una clínica registrada?{" "}
-            <a
-              className="underline text-sky-500 hover:text-sky-700 decoration-sky-500 underline-offset-4"
-              href="/clinica/login"
-            >
-              Ingresa aquí
-            </a>
+            <Link to="/clinica/login">Iniciar Sesión</Link>
           </p>
-          <p className="w-full mt-4 font-medium text-center text-gray-700">
-            ¿Eres un cliente?{" "}
-            <a
-              className="text-teal-500 underline hover:text-teal-700 decoration-teal-500 underline-offset-4"
-              href="/cliente/login"
-            >
-              Ingresa aquí
-            </a>
+          <p className="w-full font-medium text-center text-gray-700">
+            ¿Eres un paciente?{" "}
+            <Link to="/cliente/registro" variant="secondary">
+              Registrarse como cliente
+            </Link>
           </p>
         </div>
       </div>
