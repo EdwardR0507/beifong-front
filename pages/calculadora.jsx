@@ -7,7 +7,15 @@ export default function Calculadora() {
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
   console.log(isDarkMode)
+
+  // Referencia para el elemento de texto
   const textRef = useRef("")
+
+  /* 
+    Hook para habilitar el texto a voz: 
+    isTextToSpeech: estado 
+    handleSpeak: funcion que recibe el texto a hablar
+  */
   const { isTextToSpeech, handleSpeak } = useTextToSpeech()
 
   return (
