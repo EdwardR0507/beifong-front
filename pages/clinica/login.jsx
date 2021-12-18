@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { loginSchema } from "schemas/login"
 import { useTheme } from "next-themes"
+import { useState } from "react"
 
 export default function LoginClinica() {
   const {
@@ -20,9 +21,33 @@ export default function LoginClinica() {
 
   const { theme } = useTheme()
   const router = useRouter()
+  const [error, setError] = useState(false)
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data)
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      )
+      const json = await res.json()
+      console.log(json)
+      if (json.ok) {
+        window.localStorage.setItem("token", JSON.stringify(json.token))
+        router.push("/clinica/app")
+      } else {
+        console.log(json)
+        setError(json)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   console.log(errors, "errors")
@@ -72,6 +97,23 @@ export default function LoginClinica() {
             <Button variant="primary" type="submit">
               Iniciar sesión
             </Button>
+            <div className="flex justify-center mt-4">
+              {error &&
+                (error?.errors?.length > 0 ? (
+                  error.errors.map((err) => (
+                    <div
+                      key={err.msg}
+                      className="px-4 py-2 mt-2 ml-4 text-center text-white bg-rose-600"
+                    >
+                      {err.msg}
+                    </div>
+                  ))
+                ) : (
+                  <div className="px-4 py-2 mt-2 text-center text-white bg-rose-600">
+                    <p>{error.msg}</p>
+                  </div>
+                ))}
+            </div>
           </form>
           <div className="py-6 mt-10 bg-white rounded shadow-lg px-14 dark:bg-gray-700">
             <p className="w-full mb-4 font-medium text-center text-gray-700 dark:text-gray-100">

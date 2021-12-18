@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import Button from "ui/Button"
@@ -5,9 +6,10 @@ import Link from "ui/Link"
 
 export default function Suscripciones() {
   const router = useRouter()
+  const { theme } = useTheme()
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 dark:bg-gray-800">
       <header className="flex items-center justify-around w-full pt-8 text-xl max-h-24">
         <div className="flex justify-self-start">
           <Image
@@ -15,7 +17,11 @@ export default function Suscripciones() {
               router.push("/")
             }}
             className="pt-4 pl-10 cursor-pointer"
-            src="/images/logo-beifong.png"
+            src={
+              theme === "dark"
+                ? "/images/logo-beifong-dark.png"
+                : "/images/logo-beifong.png"
+            }
             width={145}
             height={46}
             alt="Logo de Beifong"
@@ -59,7 +65,7 @@ export default function Suscripciones() {
           </Button>
         </div>
       </header>
-      <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50">
+      <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
         <h1 className="text-3xl font-semibold text-center">Suscripciones</h1>
       </main>
     </div>

@@ -8,6 +8,7 @@ import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { useTheme } from "next-themes"
+import { useState } from "react"
 
 export default function RegistroClinica() {
   const {
@@ -20,9 +21,31 @@ export default function RegistroClinica() {
 
   const { theme } = useTheme()
   const router = useRouter()
+  const [error, setError] = useState(false)
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data)
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      )
+      const json = await res.json()
+      console.log(json)
+      if (json.ok) {
+        window.localStorage.setItem("clinicId", JSON.stringify(json.clinicId))
+        router.push("/confirmation")
+      }
+    } catch (error) {
+      console.log(error)
+      setError(error)
+    }
   }
 
   console.log(errors, "errors")
@@ -62,16 +85,16 @@ export default function RegistroClinica() {
                 errors={errors?.name}
               />
               <TextInput
-                name="phone"
+                name="telephone"
                 label="Teléfono"
                 register={register}
-                errors={errors?.phone}
+                errors={errors?.telephone}
               />
               <TextInput
-                name="address"
+                name="direction"
                 label="Dirección"
                 register={register}
-                errors={errors?.address}
+                errors={errors?.direction}
               />
               <TextInput
                 name="email"
@@ -90,6 +113,11 @@ export default function RegistroClinica() {
             <Button variant="primary" type="submit">
               Registrar clínica
             </Button>
+            {error && (
+              <div className="px-4 py-2 mt-4 text-center text-white bg-rose-600">
+                <p>{error.message}</p>
+              </div>
+            )}
           </form>
         </div>
       </div>
