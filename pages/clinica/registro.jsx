@@ -40,7 +40,7 @@ export default function RegistroClinica() {
       console.log(json)
       if (json.ok) {
         window.localStorage.setItem("clinicId", JSON.stringify(json.clinicId))
-        router.push("/confirmation")
+        router.push("/clinica/confirmation")
       }
     } catch (error) {
       console.log(error)
