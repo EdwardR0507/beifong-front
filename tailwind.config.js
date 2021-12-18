@@ -1,4 +1,6 @@
 module.exports = {
+  mode: "jit",
+  darkMode: "class",
   content: [
     "pages/**/*.{js,jsx}",
     "components/**/*.{js,jsx}",
