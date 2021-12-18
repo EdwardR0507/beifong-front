@@ -1,3 +1,5 @@
+import CalculatorModal from "components/CalculatorModal"
+import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import Button from "ui/Button"
@@ -6,9 +8,10 @@ import Link from "ui/Link"
 
 export default function Home() {
   const router = useRouter()
+  const { theme } = useTheme()
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 dark:bg-gray-800">
       <header className="flex items-center justify-around w-full pt-8 text-xl max-h-24">
         <div className="flex justify-self-start">
           <Image
@@ -16,7 +19,11 @@ export default function Home() {
               router.push("/")
             }}
             className="pt-4 pl-10 cursor-pointer"
-            src="/images/logo-beifong.png"
+            src={
+              theme === "dark"
+                ? "/images/logo-beifong-dark.png"
+                : "/images/logo-beifong.png"
+            }
             width={145}
             height={46}
             alt="Logo de Beifong"
@@ -60,7 +67,7 @@ export default function Home() {
           </Button>
         </div>
       </header>
-      <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50">
+      <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
         <section className="flex items-center justify-center flex-1">
           <div className="flex flex-col justify-center flex-1 w-1/2 px-16">
             <h1 className="flex flex-col text-4xl font-bold leading-tight">
@@ -69,7 +76,7 @@ export default function Home() {
                 orientadas a la <br /> accesibilidad.
               </span>
             </h1>
-            <p className="my-10 text-lg font-medium text-slate-700 lg:text-xl">
+            <p className="my-10 text-lg font-medium text-slate-700 lg:text-xl dark:text-gray-100">
               Digitaliza la gestión completa de tu clínica.
               <br />
               Páginas de Presentación, sistema de citas, de planes
@@ -82,9 +89,7 @@ export default function Home() {
               <Button variant="primary" size="large">
                 Ver suscripciones
               </Button>
-              <Button variant="outline_primary" size="large">
-                Prueba nuestro widget
-              </Button>
+              <CalculatorModal />
             </div>
           </div>
           <div className="flex items-center justify-center flex-1">
