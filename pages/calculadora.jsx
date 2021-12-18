@@ -1,12 +1,33 @@
 import AccessibilityButton from "components/AccessibilityButton"
-import { useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react"
+import { useTheme } from "next-themes"
 import { useTextToSpeech } from "hooks/useTextToSpeech"
 
 export default function Calculadora() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
+  const { systemTheme, theme, setTheme } = useTheme()
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
-  console.log(isDarkMode)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Renderiza dependiendo del tema
+  const renderThemeChanger = () => {
+    if (!isMounted) return null
+    const currentTheme = theme === "system" ? systemTheme : theme
+    return (
+      <AccessibilityButton
+        isActive={currentTheme === "dark"}
+        onClick={() => {
+          setTheme(currentTheme === "dark" ? "light" : "dark")
+        }}
+        label="Modo oscuro"
+        iconName="dark_mode"
+      />
+    )
+  }
 
   // Referencia para el elemento de texto
   const textRef = useRef("")
@@ -58,12 +79,7 @@ export default function Calculadora() {
                     Selecciona los estilos
                   </span>
                   <div className="grid grid-cols-2 gap-6 mt-2">
-                    <AccessibilityButton
-                      isActive={isDarkMode}
-                      onClick={() => setIsDarkMode(!isDarkMode)}
-                      label="Modo oscuro"
-                      iconName="dark_mode"
-                    />
+                    {renderThemeChanger()}
                     <AccessibilityButton
                       isActive={isTextToSpeech}
                       onClick={() => handleSpeak(textRef.current.textContent)}
