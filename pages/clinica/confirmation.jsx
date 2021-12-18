@@ -25,7 +25,7 @@ export default function ClinicConfirmation({ email }) {
         const json = await res.json()
         if (json.ok) {
           window.localStorage.setItem("token", JSON.stringify(json.token))
-          router.push("/clinic/app")
+          router.push("/clinica/app")
         } else {
           console.log(json)
           setError(json)
