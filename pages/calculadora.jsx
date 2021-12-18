@@ -6,9 +6,15 @@ export default function Calculadora() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
+  const [fontSizePer, setFontSizePer] = useState(1);
   console.log(isDarkMode)
   const textRef = useRef("")
   const { isTextToSpeech, handleSpeak } = useTextToSpeech()
+
+  const handleFontSizeChange = (evt) =>{
+    let perctentage = evt.target.value/20;
+    setFontSizePer(perctentage);
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-500">
@@ -39,6 +45,7 @@ export default function Calculadora() {
                       defaultValue="20"
                       className="w-full mx-4"
                       step="5"
+                      onChange={handleFontSizeChange}
                     />
                     <p className="text-lg font-bold text-gray-700">50%</p>
                   </div>
@@ -78,11 +85,25 @@ export default function Calculadora() {
                 </div>
               </div>
               <div className="flex flex-1 px-8">
-                <div className="text-base text-gray-700">
-                  <h1 className="text-2xl font-bold">H1 Título</h1>
-                  <h2 className="text-xl font-bold">H2 Título</h2>
-                  <h3 className="text-lg font-bold">H3 Título</h3>
-                  <p className="text-sm font-bold" ref={textRef}>
+                <div className="text-base text-gray-700  leading-tight">
+                  <h1 className="font-bold" 
+                      style={{fontSize: `${(fontSizePer*1.5).toString()}rem`, 
+                              margin: `${(fontSizePer*.75).toString()}rem 0`}}>
+                    H1 Título
+                  </h1>
+                  <h2 className="font-bold" 
+                      style={{fontSize: `${(fontSizePer*1.25).toString()}rem`, 
+                              margin: `${(fontSizePer*.75).toString()}rem 0`}}>
+                    H2 Título
+                  </h2>
+                  <h3 className="font-bold" 
+                      style={{fontSize: `${(fontSizePer*1.125).toString()}rem`, 
+                              margin: `${(fontSizePer*.75).toString()}rem 0`}}>
+                    H3 Título
+                  </h3>
+                  <p className="font-bold" 
+                      style={{fontSize: `${(fontSizePer*.875).toString()}rem`, 
+                              margin: `${(fontSizePer*.75).toString()}rem 0`}} ref={textRef}>
                     Digitaliza la gestión completa de tu clínica. Páginas de
                     presentación, sistema de citas, de planes personalizados y
                     mucho más.
