@@ -38,8 +38,8 @@ export default function SobreNosotros() {
             Suscripciones
           </Link>
           <Link
-            to="/sobre_nosotros"
-            active={router.pathname === "/sobre_nosotros"}
+            to="/sobre-nosotros"
+            active={router.pathname === "/sobre-nosotros"}
           >
             Sobre Nosotros
           </Link>

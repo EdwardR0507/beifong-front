@@ -1,3 +1,4 @@
+import SubscriptionCard from "components/SubscriptionCard"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -38,8 +39,8 @@ export default function Suscripciones() {
             Suscripciones
           </Link>
           <Link
-            to="/sobre_nosotros"
-            active={router.pathname === "/sobre_nosotros"}
+            to="/sobre-nosotros"
+            active={router.pathname === "/sobre-nosotros"}
           >
             Sobre Nosotros
           </Link>
@@ -65,8 +66,47 @@ export default function Suscripciones() {
           </Button>
         </div>
       </header>
-      <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
-        <h1 className="text-3xl font-semibold text-center">Suscripciones</h1>
+      <div>
+        <h1 className="mt-8 text-3xl font-semibold text-center">
+          Nuestras suscripciones
+        </h1>
+      </div>
+      <main className="flex justify-center flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
+        <section className="grid w-full grid-cols-1 mx-8 gap-x-8 md:grid-cols-2 lg:grid-cols-3">
+          <SubscriptionCard
+            type="mensual"
+            price="S/. 179"
+            features={[
+              "Lorem ipsum dolor sit amet",
+              "Lorem ipsum dolor sit amet",
+              "Lorem ipsum dolor sit amet",
+            ]}
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+          </SubscriptionCard>
+          <SubscriptionCard
+            type="anual"
+            price="S/. 399"
+            features={[
+              "Lorem ipsum dolor sit amet",
+              "Lorem ipsum dolor sit amet",
+              "Lorem ipsum dolor sit amet",
+            ]}
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+          </SubscriptionCard>
+          <SubscriptionCard
+            type="semestral"
+            price="S/. 249"
+            features={[
+              "Lorem ipsum dolor sit amet",
+              "Lorem ipsum dolor sit amet",
+              "Lorem ipsum dolor sit amet",
+            ]}
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+          </SubscriptionCard>
+        </section>
       </main>
     </div>
   )
