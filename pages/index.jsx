@@ -86,7 +86,13 @@ export default function Home() {
             </p>
 
             <div className="grid grid-cols-2 gap-4 place-content-center">
-              <Button variant="primary" size="large">
+              <Button
+                onClick={() => {
+                  router.push("/suscripciones")
+                }}
+                variant="primary"
+                size="large"
+              >
                 Ver suscripciones
               </Button>
               <CalculatorModal />
