@@ -1,3 +1,4 @@
+import AboutUsCard from "components/AboutUsCard"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -65,8 +66,18 @@ export default function SobreNosotros() {
           </Button>
         </div>
       </header>
-      <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
-        <h1 className="text-3xl font-semibold text-center">Sobre Nosotros</h1>
+      <div>
+        <h1 className="mt-8 text-3xl font-semibold text-center">
+          Sobre nosotros
+        </h1>
+      </div>
+      <main className="grid flex-1 w-full grid-cols-3 px-10 py-8 font-semibold gap-x-8 bg-sky-50 dark:bg-gray-800">
+        <AboutUsCard fileImage="arian.jpg" />
+        <AboutUsCard fileImage="edward.jpg" />
+        <AboutUsCard fileImage="elian.png" />
+        <AboutUsCard fileImage="railly.png" />
+        <AboutUsCard fileImage="leonardo.jpg" />
+        <AboutUsCard fileImage="default.png" />
       </main>
     </div>
   )
