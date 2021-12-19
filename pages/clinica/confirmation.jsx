@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Button from "ui/Button"
 
-export default function ClinicConfirmation({ email }) {
+export default function ClinicConfirmation() {
   const { theme } = useTheme()
   const router = useRouter()
   const { token } = router.query
@@ -108,7 +108,8 @@ export default function ClinicConfirmation({ email }) {
           <p className="text-lg text-center">
             Un correo ha sido enviado a {""}
             <span className="font-bold">
-              {email || "example@company.com"}
+              {JSON.parse(window.localStorage.getItem("email")) ||
+                "example@company.com"}
             </span>{" "}
             con un link de verificación. Si no has recibido algún correo, revisa
             la carpeta de spam
