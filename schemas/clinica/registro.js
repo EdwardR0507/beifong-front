@@ -17,7 +17,8 @@ export const clinicRegisterSchema = yup.object().shape({
   email: yup
     .string()
     .email("El email no es válido")
-    .required("El email es requerido"),
+    .required("El email es requerido")
+    .max(50, "El email no puede tener más de 50 caracteres"),
   password: yup
     .string()
     .required("La contraseña es requerida")
