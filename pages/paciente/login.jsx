@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { loginSchema } from "schemas/login"
 import { useTheme } from "next-themes"
+import { signIn, signOut } from "next-auth/react"
 
 export default function LoginPaciente() {
   const {
@@ -71,6 +72,16 @@ export default function LoginPaciente() {
             <Button variant="primary" type="submit">
               Iniciar sesión
             </Button>
+            <div className="flex justify-between items-center mt-3">
+                <hr className="w-full" />
+                <span className="p-2 text-gray-400  mb-1">O</span>
+                <hr className="w-full" />
+            </div>
+            <button className="uppercase h-12 mt-3 text-white w-full rounded bg-red-800 hover:bg-red-900"
+                    onClick={() => signIn()}>
+                  <i className="fa fa-google mr-2"></i>
+                  Google
+            </button>
           </form>
           <div className="py-6 mt-10 bg-white rounded shadow-lg px-14 dark:bg-gray-700">
             <p className="w-full mb-4 font-medium text-center text-gray-700 dark:text-gray-100">
