@@ -1,10 +1,14 @@
 import { useSession } from "next-auth/react"
+import { useEffect } from "react";
 
 export default function Logged() {
-    const [session, loadingSession] = useSession()
-    return (
-        <h1>
-            Logeado como {session.user.email}
-        </h1>
-    )
+    const {data: session, status} = useSession();
+    if(status === "authenticated"){
+        return (
+            <h1>
+                Logeado como {session.user.email}
+            </h1>
+        )
+    }
+    return <></>
 }

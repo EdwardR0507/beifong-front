@@ -27,10 +27,10 @@ export default NextAuth({
       return token
     },
     redirect: async (url, _baseUrl) => {
-      if (url === "/") {
-        return Promise.resolve("/")
+      if (url === "/paciente/login") {
+        return Promise.resolve("/paciente/logged")
       }
-      return Promise.resolve("/")
+      return Promise.resolve("/paciente/logged")
     },
   },
 })
