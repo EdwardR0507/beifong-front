@@ -3,9 +3,9 @@ import { ThemeProvider } from "next-themes"
 import CalculatorModal from "components/CalculatorModal"
 import { SessionProvider } from "next-auth/react"
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider session={session}>
       <ThemeProvider attribute="class">
         <CalculatorModal global />
         <Component {...pageProps} />

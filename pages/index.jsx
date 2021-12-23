@@ -1,7 +1,9 @@
 import CalculatorModal from "components/CalculatorModal"
+import { getSession, useSession } from "next-auth/react"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 import Button from "ui/Button"
 import ExampleUI from "ui/ExampleUI"
 import Link from "ui/Link"
@@ -9,6 +11,7 @@ import Link from "ui/Link"
 export default function Home() {
   const router = useRouter()
   const { theme } = useTheme()
+  const {data: session} = useSession();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 dark:bg-gray-800">

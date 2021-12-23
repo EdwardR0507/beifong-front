@@ -6,18 +6,13 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      authorizationUrl:'https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code',
     }),
   ],
   jwt: {
     encryption: true,
   },
+
   secret: process.env.GOOGLE_SECRET,
   callbacks: {
     async jwt(token, account) {
@@ -28,9 +23,9 @@ export default NextAuth({
     },
     redirect: async (url, _baseUrl) => {
       if (url === "/paciente/login") {
-        return Promise.resolve("/paciente/logged")
+        return Promise.resolve("/paciente/authPaciente")
       }
-      return Promise.resolve("/paciente/logged")
+      return Promise.resolve("/paciente/authPaciente")
     },
   },
 })
