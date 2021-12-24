@@ -6,8 +6,10 @@ const size = {
   xl: "text-xl",
 }
 
-export default function Paragraph({ className, fontSize, children }) {
+export default function Paragraph({ className, fontSize, children, ...rest }) {
   return (
-    <p className={`font-medium ${className} ${size[fontSize]}`}>{children}</p>
+    <p className={`font-medium ${className} ${size[fontSize]}`} {...rest}>
+      {children}
+    </p>
   )
 }
