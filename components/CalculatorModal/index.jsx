@@ -1,62 +1,95 @@
 import { Dialog, Transition } from "@headlessui/react"
 import AccessibilityButton from "components/AccessibilityButton"
+import { UserContext } from "context/UserContext"
 import { useTextToSpeech } from "hooks/useTextToSpeech"
 import { useTheme } from "next-themes"
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useContext, useEffect, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
+import Heading from "ui/Accessibility/Heading"
+import Paragraph from "ui/Accessibility/Paragraph"
 import Button from "ui/Button"
 
-export default function CalculatorModal({ global }) {
-  const [isOpen, setIsOpen] = useState(false)
+const size = {
+  1: "xs",
+  2: "sm",
+  3: "base",
+  4: "lg",
+  5: "xl",
+}
 
-  const [isMounted, setIsMounted] = useState(false)
-  const { systemTheme, theme, setTheme } = useTheme()
+const invertedSize = {
+  xs: 1,
+  sm: 2,
+  base: 3,
+  lg: 4,
+  xl: 5,
+}
+
+export default function CalculatorModal({ global }) {
+  const [selectedText, setSelectedText] = useState("")
+  const [isOpen, setIsOpen] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
-  const [fontSizePer, setFontSizePer] = useState(1.27)
+  const textRef = useRef("")
+  const { accessibility, reloadUser, setReloadUser } = useContext(UserContext)
+  const { isTextToSpeech, setIsTextToSpeech, handleSpeak } = useTextToSpeech()
+  const { systemTheme, theme, setTheme } = useTheme()
+  const { register, watch, handleSubmit, setValue } = useForm()
+  const currentTheme = theme === "system" ? systemTheme : theme
+  const fontSize = watch("fontSize")
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    if (accessibility) {
+      console.log("accessibility", accessibility)
+      setValue("fontSize", invertedSize[accessibility?.fontSize])
+      setIsHighContrast(accessibility?.highContrast)
+      setIsHighlighted(accessibility?.highlightText)
+      setIsTextToSpeech(accessibility?.textToVoice)
+    }
+  }, [accessibility])
 
-  // Renderiza dependiendo del tema
-  const renderThemeChanger = () => {
-    if (!isMounted) return null
-    const currentTheme = theme === "system" ? systemTheme : theme
-    return (
-      <AccessibilityButton
-        isActive={currentTheme === "dark"}
-        onClick={() => {
-          setTheme(currentTheme === "dark" ? "light" : "dark")
-        }}
-        label="Modo oscuro"
-        iconName="dark_mode"
-      />
-    )
-  }
+  const onSubmit = (data) => {
+    const settings = {
+      highContrast: isHighContrast,
+      highlightText: isHighlighted,
+      textToVoice: isTextToSpeech,
+      fontSize: size[data.fontSize],
+      darkMode: theme === "dark",
+    }
 
-  // Referencia para el elemento de texto
-  const textRef = useRef("")
+    console.log(settings, "settings")
 
-  /* 
-    Hook para habilitar el texto a voz: 
-    isTextToSpeech: estado 
-    handleSpeak: funcion que recibe el texto a hablar
-  */
-  const { isTextToSpeech, handleSpeak } = useTextToSpeech()
-
-  const handleFontSizeChange = (evt) => {
-    console.log(evt.target.value)
-    const percentage = evt.target.value / 20
-    setFontSizePer(percentage)
-  }
-
-  function closeModal() {
+    window.localStorage.setItem("accessibility", JSON.stringify(settings))
+    setReloadUser(!reloadUser)
     setIsOpen(false)
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
+  useEffect(() => {
+    // get highlighted text by the user
+    const handleSelection = (e) => {
+      const selection = window.getSelection()
+      const range = selection.getRangeAt(0)
+      const selectedText = range.toString()
+      if (selectedText) {
+        // style the text with tailwind
+        const span = document.createElement("span")
+        span.classList.add("bg-gray-700")
+        span.appendChild(range.extractContents())
+        range.insertNode(span)
+        setSelectedText(selectedText)
+      }
+      // setSelectedText(selectedText)
+      console.log(selectedText, "selectedText")
+    }
+
+    // listen to selection changes
+    document.addEventListener("mouseup", handleSelection)
+
+    // remove listener on unmount
+    return () => {
+      document.removeEventListener("mouseup", handleSelection)
+    }
+  }, [])
 
   return (
     <>
@@ -66,13 +99,17 @@ export default function CalculatorModal({ global }) {
             variant="secondary"
             type="button"
             size="large"
-            onClick={openModal}
+            onClick={() => setIsOpen(true)}
           >
             Calculadora de accesibilidad
           </Button>
         </div>
       ) : (
-        <Button variant="outline_primary" size="large" onClick={openModal}>
+        <Button
+          variant="outline_primary"
+          size="large"
+          onClick={() => setIsOpen(true)}
+        >
           Prueba nuestro widget
         </Button>
       )}
@@ -81,7 +118,7 @@ export default function CalculatorModal({ global }) {
         <Dialog
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={closeModal}
+          onClose={() => setIsOpen(false)}
         >
           <Dialog.Overlay className="fixed inset-0 bg-black opacity-30 dark:bg-white dark:opacity-10" />
           <div className="min-h-screen px-4 text-center">
@@ -113,10 +150,13 @@ export default function CalculatorModal({ global }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-3xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl dark:bg-gray-800 dark:text-gray-200 dark:shadow-2xl">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="inline-block w-full max-w-3xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl dark:bg-gray-800 dark:text-gray-200 dark:shadow-2xl"
+              >
                 <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
+                  as="h1"
+                  className="mb-4 text-xl font-bold text-center text-gray-800 dark:text-gray-200"
                 >
                   Calculadora de accesibilidad
                 </Dialog.Title>
@@ -128,24 +168,21 @@ export default function CalculatorModal({ global }) {
                           Ajustes de la fuente
                         </span>
                         <br />
-                        <span className="font-semibold text-gray-700 dark:text-gray-300">
-                          Selecciona el tamaño de la fuente
-                        </span>
                         <div className="flex mt-2">
                           <p className="text-lg font-bold text-gray-700 dark:text-gray-300">
-                            20%
+                            1
                           </p>
                           <input
                             type="range"
-                            min="20"
-                            max="35"
-                            defaultValue="27"
+                            min="1"
+                            max="5"
+                            defaultValue="3"
                             className="w-full mx-4"
                             step="1"
-                            onChange={handleFontSizeChange}
+                            {...register("fontSize")}
                           />
                           <p className="text-lg font-bold text-gray-700 dark:text-gray-300">
-                            35%
+                            5
                           </p>
                         </div>
                       </div>
@@ -154,11 +191,17 @@ export default function CalculatorModal({ global }) {
                           Ajustes de estilos
                         </span>
                         <br />
-                        <span className="font-semibold text-gray-500 dark:text-gray-300">
-                          Selecciona los estilos
-                        </span>
                         <div className="grid grid-cols-2 gap-6 mt-2">
-                          {renderThemeChanger()}
+                          <AccessibilityButton
+                            isActive={currentTheme === "dark" || false}
+                            onClick={() => {
+                              setTheme(
+                                currentTheme === "dark" ? "light" : "dark"
+                              )
+                            }}
+                            label="Modo oscuro"
+                            iconName="dark_mode"
+                          />
                           <AccessibilityButton
                             isActive={isTextToSpeech}
                             onClick={() =>
@@ -184,50 +227,35 @@ export default function CalculatorModal({ global }) {
                     </div>
                     <div className="flex flex-1 px-8">
                       <div className="text-base leading-tight text-gray-700 dark:text-gray-300">
-                        <h1
-                          className="font-bold"
-                          style={{
-                            fontSize: `${(fontSizePer * 1.5).toString()}rem`,
-                            margin: `${(fontSizePer * 0.75).toString()}rem 0`,
-                          }}
-                        >
+                        <Heading.H1 fontSize={size[fontSize]}>
                           H1 Título
-                        </h1>
-                        <h2
-                          className="font-bold"
-                          style={{
-                            fontSize: `${(fontSizePer * 1.25).toString()}rem`,
-                            margin: `${(fontSizePer * 0.75).toString()}rem 0`,
-                          }}
-                        >
+                        </Heading.H1>
+                        <Heading.H2 fontSize={size[fontSize]}>
                           H2 Título
-                        </h2>
-                        <h3
-                          className="font-bold"
-                          style={{
-                            fontSize: `${(fontSizePer * 1.125).toString()}rem`,
-                            margin: `${(fontSizePer * 0.75).toString()}rem 0`,
-                          }}
-                        >
+                        </Heading.H2>
+                        <Heading.H3 fontSize={size[fontSize]}>
                           H3 Título
-                        </h3>
-                        <p
-                          className="font-bold"
-                          style={{
-                            fontSize: `${(fontSizePer * 0.875).toString()}rem`,
-                            margin: `${(fontSizePer * 0.75).toString()}rem 0`,
-                          }}
-                          ref={textRef}
-                        >
+                        </Heading.H3>
+                        <Paragraph fontSize={size[fontSize]}>
                           Digitaliza la gestión completa de tu clínica. Páginas
                           de presentación, sistema de citas, de planes
                           personalizados y mucho más.
-                        </p>
+                        </Paragraph>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div className="flex justify-center mt-4">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="large"
+                    // onClick={handleSaveSettings}
+                  >
+                    Guardar configuración
+                  </Button>
+                </div>
+              </form>
             </Transition.Child>
           </div>
         </Dialog>

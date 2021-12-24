@@ -8,5 +8,5 @@ export const useTextToSpeech = () => {
     !isTextToSpeech ? speechSynthesis.speak(speech) : speechSynthesis.cancel()
     setIsTextToSpeech(!isTextToSpeech)
   }
-  return { isTextToSpeech, handleSpeak }
+  return { isTextToSpeech, setIsTextToSpeech, handleSpeak }
 }

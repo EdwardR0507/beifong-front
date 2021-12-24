@@ -2,14 +2,17 @@ import "tailwindcss/tailwind.css"
 import { ThemeProvider } from "next-themes"
 import CalculatorModal from "components/CalculatorModal"
 import { SessionProvider } from "next-auth/react"
+import UserProvider from "context/UserContext"
 
-function MyApp({ Component, pageProps: {session, ...pageProps} }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
-      <ThemeProvider attribute="class">
-        <CalculatorModal global />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <UserProvider>
+        <ThemeProvider attribute="class">
+          <CalculatorModal global />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UserProvider>
     </SessionProvider>
   )
 }
