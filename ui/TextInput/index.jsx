@@ -5,6 +5,7 @@ export default function TextInput({
   name,
   type = "text",
   label,
+  placeholder,
   errors,
 }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -30,33 +31,29 @@ export default function TextInput({
           id={name}
           type={typeInput}
           name={name}
-          placeholder={label}
+          placeholder={placeholder || label}
           {...register(name)}
         />
-        {type === "password" &&
-          (isVisible ? (
-            <button
-              type="button"
-              onClick={() => {
-                setIsVisible(!isVisible)
-                setTypeInput(typeInput === "password" ? "text" : "password")
-              }}
-              className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-100"
-            >
-              <span className="material-icons">visibility</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                setIsVisible(!isVisible)
-                setTypeInput(typeInput === "password" ? "text" : "password")
-              }}
-              className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-100"
-            >
-              <span className="material-icons">visibility_off</span>
-            </button>
-          ))}
+        {type === "credit_card" && (
+          <span className="material-icons text-gray-400 pointer-events-none w-8 h-8 absolute top-2/3 -translate-y-1/2 right-1 leading-5">
+            credit_card
+          </span>
+        )}
+
+        {type === "password" && (
+          <button
+            type="button"
+            onClick={() => {
+              setIsVisible(!isVisible)
+              setTypeInput(typeInput === "password" ? "text" : "password")
+            }}
+            className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-100"
+          >
+            <span className="material-icons">
+              {isVisible ? "visibility" : "visibility_off"}
+            </span>
+          </button>
+        )}
       </div>
     </div>
   )

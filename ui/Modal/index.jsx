@@ -1,10 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { Fragment, useState } from "react"
+import { Fragment } from "react"
 import Button from "ui/Button"
 
-export default function MyModal() {
-  const [isOpen, setIsOpen] = useState(true)
-
+export default function Modal({ children, type, isOpen, setIsOpen }) {
   function closeModal() {
     setIsOpen(false)
   }
@@ -13,19 +11,55 @@ export default function MyModal() {
     setIsOpen(true)
   }
 
+  const renderButton = () => {
+    switch (type) {
+      case "global":
+        return (
+          <Button
+            variant="secondary"
+            type="button"
+            size="large"
+            className="fixed bottom-10 right-10"
+            onClick={openModal}
+          >
+            Calculadora de accesibilidad
+          </Button>
+        )
+      case "tryWidget":
+        return (
+          <Button variant="outline_primary" size="large" onClick={openModal}>
+            Prueba nuestro widget
+          </Button>
+        )
+      case "subscription":
+        return (
+          <Button
+            variant="primary"
+            type="button"
+            size="medium"
+            onClick={openModal}
+            className="mt-10 mb-4"
+          >
+            Comprar
+          </Button>
+        )
+      default:
+        return (
+          <Button
+            variant="primary"
+            type="button"
+            size="medium"
+            onClick={openModal}
+          >
+            Open Modal
+          </Button>
+        )
+    }
+  }
+
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center">
-        <Button
-          variant="primary"
-          type="button"
-          size="medium"
-          onClick={openModal}
-        >
-          Open Modal
-        </Button>
-      </div>
-
+      {renderButton()}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -45,7 +79,6 @@ export default function MyModal() {
               <Dialog.Overlay className="fixed inset-0" />
             </Transition.Child>
 
-            {/* This element is to trick the browser into centering the modal contents. */}
             <span
               className="inline-block h-screen align-middle"
               aria-hidden="true"
@@ -61,38 +94,7 @@ export default function MyModal() {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  Verifique sus Datos
-                </Dialog.Title>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    Se muestran los datos de la persona que está registrando.
-                  </p>
-                </div>
-
-                <div className="flex justify-evenly mt-4">
-                  <Button
-                    variant="danger"
-                    size="medium"
-                    type="button"
-                    onClick={closeModal}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    type="submit"
-                    size="medium"
-                    onClick={closeModal}
-                  >
-                    Aceptar
-                  </Button>
-                </div>
-              </div>
+              {children}
             </Transition.Child>
           </div>
         </Dialog>

@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <UserProvider>
         <ThemeProvider attribute="class">
-          <CalculatorModal global />
+          <CalculatorModal type="global" />
           <Component {...pageProps} />
         </ThemeProvider>
       </UserProvider>
