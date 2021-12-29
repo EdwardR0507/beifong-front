@@ -59,7 +59,6 @@ export default function CalculatorModal({ type }) {
   const [rangeRef, setRangeRef] = useState(null)
   const [popperElement, setPopperElement] = useState(null)
   const [arrowElement, setArrowElement] = useState(null)
-  // const [isSelected, setIsSelected] = useState(false)
   const popperInstance = usePopper(virtualReference, popperElement, {
     modifiers: [
       {
@@ -80,7 +79,13 @@ export default function CalculatorModal({ type }) {
   const [isHighContrast, setIsHighContrast] = useState(false)
   const textRef = useRef("")
   const { accessibility, reloadUser, setReloadUser } = useContext(UserContext)
-  const { isTextToSpeech, setIsTextToSpeech, handleSpeak } = useTextToSpeech()
+  const {
+    isTextToSpeech,
+    setIsTextToSpeech,
+    handleSpeak,
+    handleCancelSpeak,
+    isSpeaking,
+  } = useTextToSpeech()
   const { systemTheme, theme, setTheme } = useTheme()
   const { register, watch, handleSubmit, setValue } = useForm()
   const currentTheme = theme === "system" ? systemTheme : theme
@@ -122,32 +127,29 @@ export default function CalculatorModal({ type }) {
   }, [])
 
   useEffect(() => {
-    if (rangeRef && typeof popperInstance.update === "function") {
-      const asyncUpdate = async () => {
-        await popperInstance.update()
-      }
-      rangeRef.rectChangedCallback = (rect) => {
-        console.log(rect.width, "rect.width")
-        if (rect.width > 0) {
-          virtualReference.getBoundingClientRect = () =>
-            generateGetBoundingClientRect(rect)
-          asyncUpdate()
-          // setIsPopperOpen(true)
-        } else {
-          setIsPopperOpen(false)
+    if (isHighlighted || isTextToSpeech) {
+      if (rangeRef && typeof popperInstance.update === "function") {
+        const asyncUpdate = async () => {
+          await popperInstance.update()
+        }
+        rangeRef.rectChangedCallback = (rect) => {
+          if (rect.width > 0) {
+            virtualReference.getBoundingClientRect = () =>
+              generateGetBoundingClientRect(rect)
+            asyncUpdate()
+          } else {
+            setIsPopperOpen(false)
+          }
         }
       }
     }
   })
-
-  // console.log(isPopperOpen, "isPopperOpen")
 
   function highlight() {
     highlighter.highlightSelection("bg-yellow-300")
     const selTxt = rangy.getSelection()
     console.log("selTxt: " + selTxt)
     rangy.getSelection().removeAllRanges()
-    // setIsSelected(true)
     setIsPopperOpen(false)
   }
 
@@ -161,7 +163,6 @@ export default function CalculatorModal({ type }) {
 
     rangeRef.range =
       selection && selection.rangeCount && selection.getRangeAt(0)
-
     if (rangy.getSelection().toString() !== "") {
       setIsPopperOpen(true)
     } else {
@@ -238,7 +239,7 @@ export default function CalculatorModal({ type }) {
                   />
                   <AccessibilityButton
                     isActive={isTextToSpeech}
-                    onClick={() => handleSpeak(textRef.current.textContent)}
+                    onClick={() => setIsTextToSpeech(!isTextToSpeech)}
                     label="Texto a voz"
                     iconName="volume_up"
                   />
@@ -257,12 +258,8 @@ export default function CalculatorModal({ type }) {
                 </div>
               </div>
             </div>
-            {console.log(
-              popperInstance.attributes,
-              "popperInstance.attributes"
-            )}
             <div className="flex flex-1 px-8">
-              {isPopperOpen && (
+              {isPopperOpen && (isHighlighted || isTextToSpeech) && (
                 <div
                   id="popper"
                   ref={setPopperElement}
@@ -271,23 +268,51 @@ export default function CalculatorModal({ type }) {
                   {...popperInstance.attributes.popper}
                   className="flex px-4 py-2 text-gray-800 rounded-lg bg-amber-200 dark:bg-gray-400 dark:text-gray-200"
                 >
-                  <Button
-                    className="flex mr-4"
-                    type="button"
-                    onClick={() => highlight()}
-                  >
-                    <span className="mr-2">Resaltar</span>
-                    <span className="material-icons">highlight</span>
-                  </Button>
-                  <Button
-                    className="flex"
-                    variant="danger"
-                    type="button"
-                    onClick={() => removeHighlights()}
-                  >
-                    <span className="mr-2">Quitar resaltado</span>
-                    <span className="material-icons">highlight_off</span>
-                  </Button>
+                  {isHighlighted && (
+                    <>
+                      <Button
+                        className="flex mr-4"
+                        type="button"
+                        onClick={() => highlight()}
+                      >
+                        <span className="mr-2">Resaltar</span>
+                        <span className="material-icons">highlight</span>
+                      </Button>
+                      <Button
+                        className="flex mr-4"
+                        variant="danger"
+                        type="button"
+                        onClick={() => removeHighlights()}
+                      >
+                        <span className="mr-2">Quitar resaltado</span>
+                        <span className="material-icons">highlight_off</span>
+                      </Button>
+                    </>
+                  )}
+                  {isTextToSpeech &&
+                    (!isSpeaking ? (
+                      <Button
+                        className="flex"
+                        variant="secondary"
+                        type="button"
+                        onClick={() =>
+                          handleSpeak(rangy.getSelection().toString())
+                        }
+                      >
+                        <span className="mr-2">Hablar</span>
+                        <span className="material-icons">volume_up</span>
+                      </Button>
+                    ) : (
+                      <Button
+                        className="flex"
+                        variant="danger"
+                        type="button"
+                        onClick={() => handleCancelSpeak()}
+                      >
+                        <span className="mr-2">Detener</span>
+                        <span className="material-icons">volume_off</span>
+                      </Button>
+                    ))}
                   <div
                     ref={setArrowElement}
                     className="bg-amber-200 -z-10 dark:bg-gray-400 dark:text-gray-200"
@@ -297,28 +322,17 @@ export default function CalculatorModal({ type }) {
                       height: "14px",
                       width: "14px",
                       boxShadow: "rgb(117 117 117) 1px 1px 1px -1px",
-                      transform: "rotate(45deg) translate(155px, -100px)",
+                      transform: `rotate(45deg) translate(${
+                        isHighlighted ? "155px" : "80px"
+                      }, ${isHighlighted ? "-100px" : "-23px"})`,
                     }}
                   ></div>
                 </div>
               )}
               <div
-                // ref={setReferenceElement}
-                onMouseUp={() => {
-                  if (rangeRef) {
-                    update()
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (rangeRef) {
-                    update(e, true)
-                  }
-                }}
-                onInput={() => {
-                  if (rangeRef) {
-                    update()
-                  }
-                }}
+                onMouseUp={update}
+                onKeyDown={update}
+                onInput={update}
                 className="text-base leading-tight text-gray-700 dark:text-gray-300"
               >
                 <Heading.H1 fontSize={size[fontSize]}>H1 Título</Heading.H1>
@@ -344,24 +358,6 @@ export default function CalculatorModal({ type }) {
             // onClick={handleSaveSettings}
           >
             Guardar configuración
-          </Button>
-        </div>
-        <div className="flex justify-center mt-4">
-          <Button
-            type="button"
-            variant="primary"
-            size="large"
-            onClick={highlight}
-          >
-            Resaltar texto
-          </Button>
-          <Button
-            type="button"
-            variant="primary"
-            size="large"
-            onClick={removeHighlights}
-          >
-            Quitar resaltado
           </Button>
         </div>
       </form>
