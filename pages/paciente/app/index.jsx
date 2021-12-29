@@ -1,7 +1,6 @@
 // import useUser from "hooks/useUser"
 import useUser from "hooks/useUser"
 import { useRouter } from "next/router"
-// import { useEffect } from "react/cjs/react.development"
 import AccessibilityButton from "ui/Accessibility/Button"
 import Heading from "ui/Accessibility/Heading"
 import Logo from "ui/Logo"
@@ -19,7 +18,7 @@ import Logo from "ui/Logo"
 //   },
 // }
 
-export default function PatientApp() {
+export default function PatientApp({ updateTooltip }) {
   const router = useRouter()
   const { accessibility } = useUser()
   // const user = {}
@@ -41,7 +40,12 @@ export default function PatientApp() {
         <Logo />
       </header>
       <main className="flex flex-col flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
-        <section className="flex flex-col items-center justify-center flex-1">
+        <section
+          onMouseUp={updateTooltip}
+          onKeyDown={updateTooltip}
+          onInput={updateTooltip}
+          className="flex flex-col items-center justify-center flex-1"
+        >
           <Heading.H1 className="mb-6" fontSize={accessibility?.fontSize}>
             ¡Bienvenido a Beifong!
           </Heading.H1>

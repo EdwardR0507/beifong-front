@@ -3,7 +3,7 @@ import AccessibilityButton from "components/AccessibilityButton"
 import { UserContext } from "context/UserContext"
 import { useTextToSpeech } from "hooks/useTextToSpeech"
 import { useTheme } from "next-themes"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Heading from "ui/Accessibility/Heading"
 import Paragraph from "ui/Accessibility/Paragraph"
@@ -34,7 +34,6 @@ export default function CalculatorModal({ type }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
-  const textRef = useRef("")
   const { accessibility, reloadUser, setReloadUser } = useContext(UserContext)
   const {
     isTextToSpeech,
@@ -155,13 +154,13 @@ export default function CalculatorModal({ type }) {
                 rangeRef={rangeRef}
                 isHighlighted={isHighlighted}
                 isTextToSpeech={isTextToSpeech}
-                highlight={highlight}
-                removeHighlights={removeHighlights}
                 isSpeaking={isSpeaking}
-                handleCancelSpeak={handleCancelSpeak}
-                handleSpeak={handleSpeak}
                 textToRead={textToRead}
                 isPopperOpen={isPopperOpen}
+                highlight={highlight}
+                removeHighlights={removeHighlights}
+                handleCancelSpeak={handleCancelSpeak}
+                handleSpeak={handleSpeak}
                 setIsPopperOpen={setIsPopperOpen}
               />
               <div
@@ -178,9 +177,6 @@ export default function CalculatorModal({ type }) {
                   presentación, sistema de citas, de planes personalizados y
                   mucho más.
                 </Paragraph>
-                <span ref={textRef}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </span>
               </div>
             </div>
           </div>
