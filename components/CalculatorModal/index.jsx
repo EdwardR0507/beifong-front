@@ -8,12 +8,9 @@ import { useForm } from "react-hook-form"
 import Heading from "ui/Accessibility/Heading"
 import Paragraph from "ui/Accessibility/Paragraph"
 import Button from "ui/Button"
-import rangy from "rangy"
-import "rangy/lib/rangy-classapplier"
-import "rangy/lib/rangy-highlighter"
 import Modal from "ui/Modal"
-import { usePopper } from "react-popper"
-import RangeRef from "utils/rangeRef"
+import useTooltip from "hooks/useTooltip"
+import AccessibilityTooltip from "components/AccessibilityTooltip"
 
 const size = {
   1: "xs",
@@ -31,49 +28,9 @@ const invertedSize = {
   xl: 5,
 }
 
-function generateGetBoundingClientRect(rect) {
-  return {
-    width: rect.width,
-    height: rect.height,
-    top: rect.top,
-    right: rect.right,
-    bottom: rect.bottom,
-    left: rect.left,
-  }
-}
-
-const virtualReference = {
-  getBoundingClientRect() {
-    return {
-      top: 10,
-      left: 10,
-      bottom: 20,
-      right: 100,
-      width: 90,
-      height: 10,
-    }
-  },
-}
-
 export default function CalculatorModal({ type }) {
   const [rangeRef, setRangeRef] = useState(null)
-  const [popperElement, setPopperElement] = useState(null)
-  const [arrowElement, setArrowElement] = useState(null)
-  const popperInstance = usePopper(virtualReference, popperElement, {
-    modifiers: [
-      {
-        name: "arrow",
-        options: {
-          element: arrowElement,
-        },
-      },
-      { name: "offset", options: { offset: [0, 8] } },
-    ],
-    placement: "top",
-  })
-
   const [isPopperOpen, setIsPopperOpen] = useState(false)
-  const [highlighter, setHighlighter] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
@@ -86,6 +43,13 @@ export default function CalculatorModal({ type }) {
     handleCancelSpeak,
     isSpeaking,
   } = useTextToSpeech()
+
+  const { update, highlight, removeHighlights, textToRead } = useTooltip(
+    setIsPopperOpen,
+    rangeRef,
+    setRangeRef
+  )
+
   const { systemTheme, theme, setTheme } = useTheme()
   const { register, watch, handleSubmit, setValue } = useForm()
   const currentTheme = theme === "system" ? systemTheme : theme
@@ -115,78 +79,6 @@ export default function CalculatorModal({ type }) {
     window.localStorage.setItem("accessibility", JSON.stringify(settings))
     setReloadUser(!reloadUser)
     setIsOpen(false)
-  }
-
-  useEffect(() => {
-    const rangeRef = new RangeRef()
-    setRangeRef(rangeRef)
-    rangy.init()
-    const highlighter = rangy.createHighlighter()
-    highlighter.addClassApplier(rangy.createClassApplier("bg-yellow-300"))
-    setHighlighter(highlighter)
-  }, [])
-
-  useEffect(() => {
-    if (isHighlighted || isTextToSpeech) {
-      if (rangeRef && typeof popperInstance.update === "function") {
-        const asyncUpdate = async () => {
-          await popperInstance.update()
-        }
-        rangeRef.rectChangedCallback = (rect) => {
-          if (rect.width > 0) {
-            virtualReference.getBoundingClientRect = () =>
-              generateGetBoundingClientRect(rect)
-            asyncUpdate()
-          } else {
-            setIsPopperOpen(false)
-          }
-        }
-      }
-    }
-  })
-
-  function highlight() {
-    highlighter.highlightSelection("bg-yellow-300")
-    const selTxt = rangy.getSelection()
-    console.log("selTxt: " + selTxt)
-    rangy.getSelection().removeAllRanges()
-    setIsPopperOpen(false)
-  }
-
-  function removeHighlights() {
-    highlighter.removeAllHighlights()
-    setIsPopperOpen(false)
-  }
-
-  const update = (evt, hide) => {
-    const selection = document.getSelection()
-
-    rangeRef.range =
-      selection && selection.rangeCount && selection.getRangeAt(0)
-    if (rangy.getSelection().toString() !== "") {
-      setIsPopperOpen(true)
-    } else {
-      setIsPopperOpen(false)
-    }
-
-    updateRect(hide)
-  }
-
-  const updateRect = (hide) => {
-    if (!hide && rangeRef.range) {
-      rangeRef.rect = rangeRef.range.getBoundingClientRect()
-    } else {
-      rangeRef.rect = {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        width: 0,
-        height: 0,
-      }
-    }
-
-    rangeRef.rectChangedCallback(rangeRef.rect)
   }
 
   return (
@@ -259,76 +151,19 @@ export default function CalculatorModal({ type }) {
               </div>
             </div>
             <div className="flex flex-1 px-8">
-              {isPopperOpen && (isHighlighted || isTextToSpeech) && (
-                <div
-                  id="popper"
-                  ref={setPopperElement}
-                  style={popperInstance.styles.popper}
-                  role="tooltip"
-                  {...popperInstance.attributes.popper}
-                  className="flex px-4 py-2 text-gray-800 rounded-lg bg-amber-200 dark:bg-gray-400 dark:text-gray-200"
-                >
-                  {isHighlighted && (
-                    <>
-                      <Button
-                        className="flex mr-4"
-                        type="button"
-                        onClick={() => highlight()}
-                      >
-                        <span className="mr-2">Resaltar</span>
-                        <span className="material-icons">highlight</span>
-                      </Button>
-                      <Button
-                        className="flex mr-4"
-                        variant="danger"
-                        type="button"
-                        onClick={() => removeHighlights()}
-                      >
-                        <span className="mr-2">Quitar resaltado</span>
-                        <span className="material-icons">highlight_off</span>
-                      </Button>
-                    </>
-                  )}
-                  {isTextToSpeech &&
-                    (!isSpeaking ? (
-                      <Button
-                        className="flex"
-                        variant="secondary"
-                        type="button"
-                        onClick={() =>
-                          handleSpeak(rangy.getSelection().toString())
-                        }
-                      >
-                        <span className="mr-2">Hablar</span>
-                        <span className="material-icons">volume_up</span>
-                      </Button>
-                    ) : (
-                      <Button
-                        className="flex"
-                        variant="danger"
-                        type="button"
-                        onClick={() => handleCancelSpeak()}
-                      >
-                        <span className="mr-2">Detener</span>
-                        <span className="material-icons">volume_off</span>
-                      </Button>
-                    ))}
-                  <div
-                    ref={setArrowElement}
-                    className="bg-amber-200 -z-10 dark:bg-gray-400 dark:text-gray-200"
-                    style={{
-                      ...popperInstance.styles.arrow,
-                      clipPath: "rect(0, 18px, 18px, -4px)",
-                      height: "14px",
-                      width: "14px",
-                      boxShadow: "rgb(117 117 117) 1px 1px 1px -1px",
-                      transform: `rotate(45deg) translate(${
-                        isHighlighted ? "155px" : "80px"
-                      }, ${isHighlighted ? "-100px" : "-23px"})`,
-                    }}
-                  ></div>
-                </div>
-              )}
+              <AccessibilityTooltip
+                rangeRef={rangeRef}
+                isHighlighted={isHighlighted}
+                isTextToSpeech={isTextToSpeech}
+                highlight={highlight}
+                removeHighlights={removeHighlights}
+                isSpeaking={isSpeaking}
+                handleCancelSpeak={handleCancelSpeak}
+                handleSpeak={handleSpeak}
+                textToRead={textToRead}
+                isPopperOpen={isPopperOpen}
+                setIsPopperOpen={setIsPopperOpen}
+              />
               <div
                 onMouseUp={update}
                 onKeyDown={update}
