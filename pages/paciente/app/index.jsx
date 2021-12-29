@@ -1,39 +1,39 @@
 // import useUser from "hooks/useUser"
 import useUser from "hooks/useUser"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 // import { useEffect } from "react/cjs/react.development"
 import AccessibilityButton from "ui/Accessibility/Button"
 import Heading from "ui/Accessibility/Heading"
 import Logo from "ui/Logo"
 
-// const user = {
-//   name: "Elian Gómez",
-//   email: "elian.gomez@gmail.com",
-//   accessibility: {
-//     darkMode: true,
-//     highContrast: false,
-//     textToVoice: true,
-//     highligthText: false,
-//     fontSize: "base",
-//     visualDisease: "healthy-vision",
-//   },
-// }
+const user = {
+  name: "Elian Gómez",
+  email: "elian.gomez@gmail.com",
+  accessibility: {
+    darkMode: true,
+    highContrast: false,
+    textToVoice: true,
+    highligthText: false,
+    fontSize: "base",
+    visualDisease: "healthy-vision",
+  },
+}
 
 export default function PatientApp() {
   const router = useRouter()
   const { accessibility } = useUser()
-  // const user = {}
 
-  // useEffect(() => {
-  //   window.localStorage.setItem(
-  //     "user",
-  //     JSON.stringify({ name: user.name, email: user.email })
-  //   )
-  //   window.localStorage.setItem(
-  //     "accessibility",
-  //     JSON.stringify(user.accessibility)
-  //   )
-  // }, [])
+  useEffect(() => {
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({ name: user.name, email: user.email })
+    )
+    window.localStorage.setItem(
+      "accessibility",
+      JSON.stringify(user.accessibility)
+    )
+  }, [])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 dark:bg-gray-800">
