@@ -3,15 +3,14 @@ import AccessibilityButton from "components/AccessibilityButton"
 import { UserContext } from "context/UserContext"
 import { useTextToSpeech } from "hooks/useTextToSpeech"
 import { useTheme } from "next-themes"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Heading from "ui/Accessibility/Heading"
 import Paragraph from "ui/Accessibility/Paragraph"
 import Button from "ui/Button"
-import rangy from "rangy"
-import "rangy/lib/rangy-classapplier"
-import "rangy/lib/rangy-highlighter"
 import Modal from "ui/Modal"
+import useTooltip from "hooks/useTooltip"
+import AccessibilityTooltip from "components/AccessibilityTooltip"
 
 const size = {
   1: "xs",
@@ -30,14 +29,26 @@ const invertedSize = {
 }
 
 export default function CalculatorModal({ type }) {
-  // const [selectedText, setSelectedText] = useState("")
-  const [highlighter, setHighlighter] = useState(null)
+  const [rangeRef, setRangeRef] = useState(null)
+  const [isPopperOpen, setIsPopperOpen] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
-  const textRef = useRef("")
   const { accessibility, reloadUser, setReloadUser } = useContext(UserContext)
-  const { isTextToSpeech, setIsTextToSpeech, handleSpeak } = useTextToSpeech()
+  const {
+    isTextToSpeech,
+    setIsTextToSpeech,
+    handleSpeak,
+    handleCancelSpeak,
+    isSpeaking,
+  } = useTextToSpeech()
+
+  const { update, highlight, removeHighlights, textToRead } = useTooltip(
+    setIsPopperOpen,
+    rangeRef,
+    setRangeRef
+  )
+
   const { systemTheme, theme, setTheme } = useTheme()
   const { register, watch, handleSubmit, setValue } = useForm()
   const currentTheme = theme === "system" ? systemTheme : theme
@@ -67,33 +78,6 @@ export default function CalculatorModal({ type }) {
     window.localStorage.setItem("accessibility", JSON.stringify(settings))
     setReloadUser(!reloadUser)
     setIsOpen(false)
-  }
-
-  useEffect(() => {
-    rangy.init()
-    const highlighter = rangy.createHighlighter()
-    highlighter.addClassApplier(rangy.createClassApplier("bg-yellow-300"), {
-      ignoreWhiteSpace: true,
-      tagNames: ["span"],
-      elementProperties: {
-        style: {
-          backgroundColor: "green",
-          color: "black",
-        },
-      },
-    })
-    setHighlighter(highlighter)
-  }, [])
-
-  function highlight() {
-    highlighter.highlightSelection("bg-yellow-300")
-    const selTxt = rangy.getSelection()
-    console.log("selTxt: " + selTxt)
-    rangy.getSelection().removeAllRanges()
-  }
-
-  function removeHighlights() {
-    highlighter.removeAllHighlights()
   }
 
   return (
@@ -146,7 +130,7 @@ export default function CalculatorModal({ type }) {
                   />
                   <AccessibilityButton
                     isActive={isTextToSpeech}
-                    onClick={() => handleSpeak(textRef.current.textContent)}
+                    onClick={() => setIsTextToSpeech(!isTextToSpeech)}
                     label="Texto a voz"
                     iconName="volume_up"
                   />
@@ -166,16 +150,29 @@ export default function CalculatorModal({ type }) {
               </div>
             </div>
             <div className="flex flex-1 px-8">
-              <div className="text-base leading-tight text-gray-700 dark:text-gray-300">
+              <AccessibilityTooltip
+                rangeRef={rangeRef}
+                isHighlighted={isHighlighted}
+                isTextToSpeech={isTextToSpeech}
+                isSpeaking={isSpeaking}
+                textToRead={textToRead}
+                isPopperOpen={isPopperOpen}
+                highlight={highlight}
+                removeHighlights={removeHighlights}
+                handleCancelSpeak={handleCancelSpeak}
+                handleSpeak={handleSpeak}
+                setIsPopperOpen={setIsPopperOpen}
+              />
+              <div
+                onMouseUp={update}
+                onKeyDown={update}
+                onInput={update}
+                className="text-base leading-tight text-gray-700 dark:text-gray-300"
+              >
                 <Heading.H1 fontSize={size[fontSize]}>H1 Título</Heading.H1>
                 <Heading.H2 fontSize={size[fontSize]}>H2 Título</Heading.H2>
                 <Heading.H3 fontSize={size[fontSize]}>H3 Título</Heading.H3>
-                <Paragraph
-                  // onMouseUp={handleMouseUp}
-                  // onKeyUp={handleKeyUp}
-                  // onBlur={handleBlur}
-                  fontSize={size[fontSize]}
-                >
+                <Paragraph fontSize={size[fontSize]}>
                   Digitaliza la gestión completa de tu clínica. Páginas de
                   presentación, sistema de citas, de planes personalizados y
                   mucho más.
@@ -192,24 +189,6 @@ export default function CalculatorModal({ type }) {
             // onClick={handleSaveSettings}
           >
             Guardar configuración
-          </Button>
-        </div>
-        <div className="flex justify-center mt-4">
-          <Button
-            type="button"
-            variant="primary"
-            size="large"
-            onClick={highlight}
-          >
-            Resaltar texto
-          </Button>
-          <Button
-            type="button"
-            variant="primary"
-            size="large"
-            onClick={removeHighlights}
-          >
-            Quitar resaltado
           </Button>
         </div>
       </form>
