@@ -33,6 +33,16 @@ export default function ClinicApp() {
           >
             Cerrar sesión
           </Button>
+          <Button
+            className="mt-4"
+            onClick={() => {
+              router.push("/clinica/page-builder")
+            }}
+            size="large"
+            variant="primary"
+          >
+            Ir a constructor de página
+          </Button>
         </section>
       </main>
     </div>

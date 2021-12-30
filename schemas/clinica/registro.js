@@ -5,7 +5,10 @@ export const clinicRegisterSchema = yup.object().shape({
     .string()
     .required("El nombre es requerido")
     .max(70, "El nombre no puede tener más de 70 caracteres")
-    .matches(/^[a-zA-Z\s]*$/, "El nombre solo puede contener letras"),
+    .matches(
+      /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+      "El nombre solo puede contener letras y espacios"
+    ),
   telephone: yup
     .string()
     .required("El teléfono es requerido")

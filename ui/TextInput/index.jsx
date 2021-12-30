@@ -10,8 +10,9 @@ export default function TextInput({
 }) {
   const [isVisible, setIsVisible] = useState(false)
   const [typeInput, setTypeInput] = useState(type)
+
   return (
-    <div className="w-full px-3">
+    <div className="w-full px-3 mb-3">
       <div className="grid grid-cols-2 mb-2">
         <label
           className="flex items-center py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100"
@@ -35,7 +36,7 @@ export default function TextInput({
           {...register(name)}
         />
         {type === "credit_card" && (
-          <span className="material-icons text-gray-400 pointer-events-none w-8 h-8 absolute top-2/3 -translate-y-1/2 right-1 leading-5">
+          <span className="absolute w-8 h-8 leading-5 text-gray-400 -translate-y-1/2 pointer-events-none material-icons top-2/3 right-1">
             credit_card
           </span>
         )}

@@ -76,7 +76,7 @@ export default function Modal({ children, type, isOpen, setIsOpen }) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0" />
+              <Dialog.Overlay className="fixed inset-0 bg-slate-800/40 dark:bg-gray-50/10" />
             </Transition.Child>
 
             <span
