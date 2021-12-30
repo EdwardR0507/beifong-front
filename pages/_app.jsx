@@ -13,7 +13,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <UserProvider>
         <ThemeProvider attribute="class">
-          <CalculatorModal type="global" />
           {router.pathname.includes("/paciente") ? (
             <AccessibilityLayout
               component={Component}
@@ -22,6 +21,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           ) : (
             <Component {...pageProps} />
           )}
+          <CalculatorModal type="global" />
         </ThemeProvider>
       </UserProvider>
     </SessionProvider>
