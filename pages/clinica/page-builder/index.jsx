@@ -6,11 +6,21 @@ import Logo from "ui/Logo"
 import TextInput from "ui/TextInput"
 import * as yup from "yup"
 import Image from "next/image"
+import FileInput from "ui/FileInput"
+import SelectInput from "ui/SelectInput"
+import RadioGroup from "ui/RadioGroup"
+import TextareaInput from "ui/TextareaInput"
 
 const schema = yup.object().shape({
   logo: yup.mixed().required("El logo es requerido"),
   slogan: yup.string().required("El slogan es requerido"),
   subslogan: yup.string().required("El subslogan es requerido"),
+  image1: yup.mixed().required("La imagen es requerida"),
+  image1_position: yup.string().required("La posición es requerida"),
+  image2: yup.mixed().required("La imagen es requerida"),
+  image2_position: yup.string().required("La posición es requerida"),
+  description1: yup.string().required("La descripción es requerida"),
+  description2: yup.string().required("La descripción es requerida"),
 })
 
 export default function PageBuilder() {
@@ -20,6 +30,7 @@ export default function PageBuilder() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -28,7 +39,15 @@ export default function PageBuilder() {
   const logo = watch("logo")
   const slogan = watch("slogan")
   const subslogan = watch("subslogan")
-  console.log(logo, "logo")
+  const image1 = watch("image1")
+  const image1Position = watch("image1_position")
+  const description1 = watch("description1")
+  const image2 = watch("image2")
+  const image2Position = watch("image2_position")
+  const description2 = watch("description2")
+
+  console.log(image1Position, "image1_position")
+  console.log(image2Position, "image2_position")
 
   const onSubmit = (data) => {
     console.log(data)
@@ -42,8 +61,8 @@ export default function PageBuilder() {
         )}
         <main className="flex flex-col flex-1 min-h-screen transition-all duration-300 bg-sky-50 dark:bg-gray-800">
           <header className="flex items-center justify-between h-1/5">
-            {logo && (
-              <figure className="relative w-1/4 ml-4 h-2/6">
+            {logo?.length > 0 && (
+              <figure className="relative w-1/4 ml-4 h-4/6">
                 <Image
                   src={URL.createObjectURL(logo[0])}
                   alt="logo"
@@ -61,6 +80,8 @@ export default function PageBuilder() {
           <main className="flex flex-col ml-4">
             <span className="mb-6 text-4xl font-semibold">{slogan}</span>
             <span className="mb-6 text-xl font-semibold">{subslogan}</span>
+            <span className="mb-6 text-xl font-semibold">{description1}</span>
+            <span className="mb-6 text-xl font-semibold">{description2}</span>
             <Button className="mb-6" variant="tertiary">
               Realizar consulta
             </Button>
@@ -68,7 +89,7 @@ export default function PageBuilder() {
         </main>
       </div>
       <aside
-        className={`w-1/4 min-h-screen dark:bg-gray-700 bg-sky-100 transition-all duration-300 ease-in-out shadow-lg shadow-black/20 rounded-lg
+        className={`w-1/4 min-h-screen dark:bg-gray-700 bg-gray-100 transition-all duration-300 ease-in-out shadow-lg shadow-black/20 rounded-lg
         ${showSideBar ? "translate-x-0" : "-translate-x-full"}`}
       >
         <Logo />
@@ -77,30 +98,13 @@ export default function PageBuilder() {
             <span className="mb-6 ml-3 font-semibold text-gray-400">
               Cabecera
             </span>
-            <div className="w-full px-3">
-              <div className="grid grid-cols-2 mb-2">
-                <label
-                  className="flex items-center py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100"
-                  htmlFor="grid-first-name"
-                >
-                  Logo de la clinica
-                </label>
-                {errors?.logo && (
-                  <span className="flex items-center justify-center px-2 text-sm font-medium text-center rounded select-none bg-rose-100 text-rose-600 dark:bg-rose-800 dark:text-gray-100">
-                    {errors.logo}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div>
-              <input
-                className="file:transition file:cursor-pointer file:mx-2 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-500 file:text-white hover:file:bg-sky-700"
-                id="logo"
-                type="file"
-                name={name}
-                {...register("logo")}
-              />
-            </div>
+            <FileInput
+              errors={errors.logo}
+              register={register}
+              label="Logo"
+              name="logo"
+              fileWatch={logo}
+            />
           </div>
           <div className="w-full px-3 mt-4">
             <span className="mb-6 ml-3 font-semibold text-gray-400">
@@ -118,11 +122,155 @@ export default function PageBuilder() {
               register={register}
               error={errors.subslogan}
             />
+            <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
+              Días de atención
+            </label>
+            <div className="flex items-center">
+              <SelectInput
+                name="initial_day"
+                options={[
+                  { value: "Lunes", label: "Lunes" },
+                  { value: "Martes", label: "Martes" },
+                  { value: "Miércoles", label: "Miércoles" },
+                  { value: "Jueves", label: "Jueves" },
+                  { value: "Viernes", label: "Viernes" },
+                  { value: "Sábado", label: "Sábado" },
+                  { value: "Domingo", label: "Domingo" },
+                ]}
+                {...register("initial_day")}
+                noLabel
+              />
+              <span className="mx-2">a</span>
+              <SelectInput
+                name="final_day"
+                options={[
+                  { value: "Lunes", label: "Lunes" },
+                  { value: "Martes", label: "Martes" },
+                  { value: "Miércoles", label: "Miércoles" },
+                  { value: "Jueves", label: "Jueves" },
+                  { value: "Viernes", label: "Viernes" },
+                  { value: "Sábado", label: "Sábado" },
+                  { value: "Domingo", label: "Domingo" },
+                ]}
+                {...register("final_day")}
+                noLabel
+              />
+            </div>
+            <div className="mt-3">
+              <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
+                Horario de atención
+              </label>
+              <div className="flex items-center">
+                <SelectInput
+                  name="initial_hour"
+                  placeholder="HH"
+                  options={Array.from(Array(24).keys()).map((hour) => ({
+                    value: hour.toString().padStart(2, "0"),
+                    label: hour.toString().padStart(2, "0"),
+                  }))}
+                  {...register("initial_hour")}
+                  noLabel
+                />
+                <span className="mx-2">:</span>
+                <SelectInput
+                  name="initial_minute"
+                  placeholder="MM"
+                  options={Array.from(Array(60).keys()).map((minute) => ({
+                    value: minute.toString().padStart(2, "0"),
+                    label: minute.toString().padStart(2, "0"),
+                  }))}
+                  {...register("initial_minute")}
+                  noLabel
+                />
+                <span className="mx-2">a</span>
+                <SelectInput
+                  name="final_hour"
+                  placeholder="HH"
+                  options={Array.from(Array(24).keys()).map((hour) => ({
+                    value: hour.toString().padStart(2, "0"),
+                    label: hour.toString().padStart(2, "0"),
+                  }))}
+                  {...register("final_hour")}
+                  noLabel
+                />
+                <span className="mx-2">:</span>
+                <SelectInput
+                  name="final_minute"
+                  placeholder="MM"
+                  options={Array.from(Array(60).keys()).map((minute) => ({
+                    value: minute.toString().padStart(2, "0"),
+                    label: minute.toString().padStart(2, "0"),
+                  }))}
+                  {...register("final_minute")}
+                  noLabel
+                />
+              </div>
+            </div>
+          </div>
+          <div className="w-full px-3 mt-4">
+            <span className="mb-6 ml-3 font-semibold text-gray-400">
+              Sección 2
+            </span>
+            <FileInput
+              errors={errors.image1}
+              register={register}
+              label="Imagen de sección 2"
+              name="image1"
+              fileWatch={image1}
+            />
+            <div className="mt-3">
+              <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
+                Ubicación de la imagen
+              </label>
+              <RadioGroup
+                options={[
+                  { value: "left", name: "Izquierda" },
+                  { value: "right", name: "Derecha" },
+                ]}
+                setValue={(value) => setValue("image1_position", value)}
+              />
+            </div>
+            <TextareaInput
+              label="Descripción de sección 2"
+              name="description1"
+              register={register}
+              error={errors.description1}
+            />
+          </div>
+          <div className="w-full px-3 mt-4">
+            <span className="mb-6 ml-3 font-semibold text-gray-400">
+              Sección 3
+            </span>
+            <FileInput
+              errors={errors.image2}
+              register={register}
+              label="Imagen de sección 3"
+              name="image2"
+              fileWatch={image2}
+            />
+            <div className="mt-3">
+              <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
+                Ubicación de la imagen
+              </label>
+              <RadioGroup
+                options={[
+                  { value: "left", name: "Izquierda" },
+                  { value: "right", name: "Derecha" },
+                ]}
+                setValue={(value) => setValue("image2_position", value)}
+              />
+            </div>
+            <TextareaInput
+              label="Descripción de sección 3"
+              name="description2"
+              register={register}
+              error={errors.description1}
+            />
           </div>
         </form>
       </aside>
       <Button
-        className="absolute top-0 right-0 mt-4 mr-4"
+        className="fixed top-0 right-0 mt-4 mr-4"
         onClick={() => setShowSideBar(!showSideBar)}
       >
         <svg
