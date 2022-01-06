@@ -21,8 +21,20 @@ export default function RegistroPaciente() {
   const { theme } = useTheme()
   const router = useRouter()
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
+    console.log(data);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/patients/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      }
+    )
+    const json = await res.json();
+    console.log(json)
   }
 
   console.log(errors, "errors")
