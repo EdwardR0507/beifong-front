@@ -35,7 +35,7 @@ export default function TextInput({
           {...register(name)}
         />
         {type === "credit_card" && (
-          <span className="material-icons text-gray-400 pointer-events-none w-8 h-8 absolute top-2/3 -translate-y-1/2 right-1 leading-5">
+          <span className="material-icons absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none dark:text-gray-100">
             credit_card
           </span>
         )}
