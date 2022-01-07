@@ -2,11 +2,27 @@ import { useState } from "react"
 
 export const useTextToSpeech = () => {
   const [isTextToSpeech, setIsTextToSpeech] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
 
   const handleSpeak = (text) => {
     const speech = new SpeechSynthesisUtterance(text)
-    !isTextToSpeech ? speechSynthesis.speak(speech) : speechSynthesis.cancel()
-    setIsTextToSpeech(!isTextToSpeech)
+    speechSynthesis.speak(speech)
+    setIsSpeaking(true)
+    speech.onend = () => {
+      setIsSpeaking(false)
+    }
   }
-  return { isTextToSpeech, handleSpeak }
+
+  const handleCancelSpeak = () => {
+    speechSynthesis.cancel()
+    setIsSpeaking(false)
+  }
+
+  return {
+    isTextToSpeech,
+    setIsTextToSpeech,
+    handleSpeak,
+    handleCancelSpeak,
+    isSpeaking,
+  }
 }

@@ -11,7 +11,7 @@ import Link from "ui/Link"
 export default function Home() {
   const router = useRouter()
   const { theme } = useTheme()
-  const {data: session} = useSession();
+  const { data: session } = useSession()
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 dark:bg-gray-800">
@@ -98,7 +98,7 @@ export default function Home() {
               >
                 Ver suscripciones
               </Button>
-              <CalculatorModal />
+              <CalculatorModal type="tryWidget" />
             </div>
           </div>
           <div className="flex items-center justify-center flex-1">

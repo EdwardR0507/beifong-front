@@ -1,4 +1,4 @@
-import Button from "ui/Button"
+import SubscriptionModal from "components/SubscriptionModal"
 
 export default function SubscriptionCard({ type, price, features, children }) {
   const isAnual = type === "anual"
@@ -35,9 +35,7 @@ export default function SubscriptionCard({ type, price, features, children }) {
             <span className="ml-2">{feature}</span>
           </p>
         ))}
-        <Button className="mt-10 mb-4" type="button">
-          Comprar
-        </Button>
+        <SubscriptionModal type="subscription" />
       </section>
     </article>
   )

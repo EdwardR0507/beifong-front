@@ -67,11 +67,11 @@ export default function Suscripciones() {
         </div>
       </header>
       <div>
-        <h1 className="mt-8 text-3xl font-semibold text-center">
+        <h1 className="my-8 text-3xl font-semibold text-center">
           Nuestras suscripciones
         </h1>
       </div>
-      <main className="flex justify-center flex-1 w-screen font-semibold bg-sky-50 dark:bg-gray-800">
+      <main className="flex justify-center flex-1 w-full font-semibold bg-sky-50 dark:bg-gray-800">
         <section className="grid w-full grid-cols-1 mx-8 gap-x-8 md:grid-cols-2 lg:grid-cols-3">
           <SubscriptionCard
             type="mensual"

@@ -2,14 +2,28 @@ import "tailwindcss/tailwind.css"
 import { ThemeProvider } from "next-themes"
 import CalculatorModal from "components/CalculatorModal"
 import { SessionProvider } from "next-auth/react"
+import UserProvider from "context/UserContext"
+import { useRouter } from "next/router"
+import AccessibilityLayout from "components/AccessibilityLayout"
 
-function MyApp({ Component, pageProps: {session, ...pageProps} }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const router = useRouter()
+
   return (
     <SessionProvider session={session}>
-      <ThemeProvider attribute="class">
-        <CalculatorModal global />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <UserProvider>
+        <ThemeProvider attribute="class">
+          <CalculatorModal type="global" />
+          {router.pathname.includes("/paciente") ? (
+            <AccessibilityLayout
+              component={Component}
+              pageProps={{ ...pageProps, session }}
+            />
+          ) : (
+            <Component {...pageProps} />
+          )}
+        </ThemeProvider>
+      </UserProvider>
     </SessionProvider>
   )
 }
