@@ -40,7 +40,7 @@ export default function LoginClinica() {
       console.log(json)
       if (json.ok) {
         window.localStorage.setItem("token", JSON.stringify(json.token))
-        router.push("/clinica/app")
+        router.push("/suscripciones")
       } else {
         console.log(json)
         setError(json)

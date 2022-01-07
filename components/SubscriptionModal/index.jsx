@@ -8,7 +8,7 @@ import { clinicaSubscriptionSchema } from "schemas/clinica/suscripcion"
 import Modal from "ui/Modal"
 import { useState } from "react"
 
-export default function SubscriptionModal() {
+export default function SubscriptionModal({ onSubmitSubscription }) {
   const {
     register,
     handleSubmit,
@@ -42,7 +42,7 @@ export default function SubscriptionModal() {
     <Modal type={"subscription"} isOpen={isOpen} setIsOpen={setIsOpen}>
       <form
         className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-sky-50 dark:bg-gray-600 shadow-xl rounded-2xl"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmitSubscription)}
       >
         <Dialog.Title
           as="h3"
@@ -106,6 +106,7 @@ export default function SubscriptionModal() {
             size="medium"
             type="submit"
             className="w-full"
+            onSubmit={handleSubmit(onSubmit)}
           >
             Realizar Pago
           </Button>

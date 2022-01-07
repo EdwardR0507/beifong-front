@@ -2,12 +2,38 @@ import SubscriptionCard from "components/SubscriptionCard"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 import Button from "ui/Button"
 import Link from "ui/Link"
 
 export default function Suscripciones() {
   const router = useRouter()
   const { theme } = useTheme()
+  let token;
+  
+  useEffect(() => {
+    token = window.localStorage.getItem("token")
+  }, [])
+
+  const onSubmit = async (mount, type) => {
+    const data = {
+      mount: mount,
+      type: type
+    };
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/subscribe`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      body: JSON.stringify(data)
+      }
+    );
+    const json = res.json();
+    console.log(json);
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 dark:bg-gray-800">
@@ -81,6 +107,7 @@ export default function Suscripciones() {
               "Lorem ipsum dolor sit amet",
               "Lorem ipsum dolor sit amet",
             ]}
+            handleSubmit={onSubmit("179", "mensual")}
           >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
           </SubscriptionCard>

@@ -37,7 +37,7 @@ export default function LoginPaciente() {
       const json = await res.json();
       console.log(json);
       if (json.ok) {
-        window.localStorage.setItem("tokenPaciente", JSON.stringify(json.token))
+        window.localStorage.setItem("token", JSON.stringify(json.token))
         router.push("/paciente/authPaciente")
       } else {
         console.log(json)
