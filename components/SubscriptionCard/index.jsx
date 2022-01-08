@@ -1,7 +1,17 @@
 import SubscriptionModal from "components/SubscriptionModal"
 
-export default function SubscriptionCard({ type, price, features, children }) {
-  const isAnual = type === "anual"
+export default function SubscriptionCard({
+  type,
+  price,
+  features,
+  children,
+  handleSubmit,
+}) {
+  const order = {
+    price,
+    type,
+  }
+  const isAnual = type === "Anual"
 
   return (
     <article
@@ -35,7 +45,7 @@ export default function SubscriptionCard({ type, price, features, children }) {
             <span className="ml-2">{feature}</span>
           </p>
         ))}
-        <SubscriptionModal type="subscription" />
+        <SubscriptionModal order={order} onSubmitSubscription={handleSubmit} />
       </section>
     </article>
   )

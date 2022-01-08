@@ -8,7 +8,7 @@ import { clinicaSubscriptionSchema } from "schemas/clinica/suscripcion"
 import Modal from "ui/Modal"
 import { useState } from "react"
 
-export default function SubscriptionModal() {
+export default function SubscriptionModal({ order, onSubmitSubscription }) {
   const {
     register,
     handleSubmit,
@@ -18,11 +18,12 @@ export default function SubscriptionModal() {
   })
 
   const [isOpen, setIsOpen] = useState(false)
-
+  const { type, price } = order
   console.log(errors, "errors")
 
   const onSubmit = async (data, e) => {
     e.preventDefault()
+    onSubmitSubscription()
     setIsOpen(false)
     console.log(data)
   }
@@ -92,10 +93,10 @@ export default function SubscriptionModal() {
               height={20}
               alt="sub"
             />
-            <div className="flex flex-col w-80 h-32 justify-around px-4">
-              {rowOrder("Producto", "Suscripción PRO")}
+            <div className="flex flex-col w-96 h-32 justify-around px-4">
+              {rowOrder("Producto", `Suscripción ${type}`)}
               {rowOrder("Cantidad", "1")}
-              {rowOrder("Precio", "S/. 399.00")}
+              {rowOrder("Precio", `${price}`)}
             </div>
           </div>
         </div>
