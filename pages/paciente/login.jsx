@@ -22,30 +22,29 @@ export default function LoginPaciente() {
   const { theme } = useTheme()
   const router = useRouter()
 
-  const onSubmit =async (data) => {
-    console.log(data);
-    try{
+  const onSubmit = async (data) => {
+    console.log(data)
+    try {
       const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/patients/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-      })
-      const json = await res.json();
-      console.log(json);
+        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/patients/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      )
+      const json = await res.json()
+      console.log(json)
       if (json.ok) {
         window.localStorage.setItem("token", JSON.stringify(json.token))
         router.push("/paciente/authPaciente")
       } else {
         console.log(json)
-        setError(json)
       }
-    }
-    catch(err){
-      console.log(err);
+    } catch (err) {
+      console.log(err)
     }
   }
 
