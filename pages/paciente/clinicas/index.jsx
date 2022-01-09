@@ -15,8 +15,6 @@ export default function PatientApp({ updateTooltip }) {
     const { currentPage, totalPages, pageLimit } = data
     const offset = (currentPage - 1) * pageLimit
     const _currentClinics = fakeClinicData.slice(offset, offset + pageLimit)
-    console.log(currentClinics)
-    console.log(_currentClinics)
     setTotalPages(totalPages)
     setCurrentPage(currentPage)
     setCurrentClinics(_currentClinics)

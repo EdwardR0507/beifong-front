@@ -204,7 +204,7 @@ export default function PageBuilder() {
                         Días
                       </span>
                       <span className="ml-2">
-                        {daysToSpanish(initialDay)} a {daysToSpanish(finalDay)}
+                        {daysToSpanish[initialDay]} a {daysToSpanish[finalDay]}
                       </span>
                     </p>
                     <p className="flex justify-between w-full mb-6 text-xl font-semibold">
