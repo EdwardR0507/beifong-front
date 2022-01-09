@@ -1,3 +1,5 @@
+import useUser from "hooks/useUser"
+
 const styles = {
   base: "transition rounded-lg",
   primary:
@@ -37,9 +39,13 @@ export default function AccessibilityButton({
   disabled,
   ...rest
 }) {
+  const { accessibility } = useUser()
+
   return (
     <button
-      className={`${styles.base} ${_fontSize[fontSize]} ${sizing[size]} ${styles[variant]} ${className}`}
+      className={`${styles.base} ${_fontSize[accessibility?.fontSize]} ${
+        sizing[size]
+      } ${styles[variant]} ${className}`}
       disabled={disabled}
       type={type}
       onClick={onClick}
