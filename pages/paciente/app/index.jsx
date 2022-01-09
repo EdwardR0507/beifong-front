@@ -1,4 +1,3 @@
-import useUser from "hooks/useUser"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import AccessibilityButton from "ui/Accessibility/Button"
@@ -20,7 +19,6 @@ const user = {
 
 export default function PatientApp({ updateTooltip }) {
   const router = useRouter()
-  const { accessibility } = useUser()
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -45,14 +43,12 @@ export default function PatientApp({ updateTooltip }) {
           onInput={updateTooltip}
           className="flex flex-col items-center justify-center flex-1"
         >
-          <Heading.H1 className="mb-6" fontSize={accessibility?.fontSize}>
-            ¡Bienvenido a Beifong!
-          </Heading.H1>
-          <Heading.H2 className="mb-6" fontSize={accessibility?.fontSize}>
+          <Heading.H1 className="mb-6">¡Bienvenido a Beifong!</Heading.H1>
+          <Heading.H2 className="mb-6">
             En esta aplicación podrás encontrar información sobre la
             accesibilidad de tu página web.
           </Heading.H2>
-          <Heading.H3 className="mb-6" fontSize={accessibility?.fontSize}>
+          <Heading.H3 className="mb-6">
             ¡No te olvides de ajustar la fuente de tu página web!
           </Heading.H3>
           <AccessibilityButton
@@ -62,7 +58,6 @@ export default function PatientApp({ updateTooltip }) {
             }}
             size="large"
             variant="danger"
-            fontSize={accessibility?.fontSize}
           >
             Cerrar sesión
           </AccessibilityButton>

@@ -1,3 +1,5 @@
+import useUser from "hooks/useUser"
+
 const size = {
   xs: "text-xs",
   sm: "text-sm",
@@ -7,8 +9,12 @@ const size = {
 }
 
 export default function Paragraph({ className, fontSize, children, ...rest }) {
+  const { accessibility } = useUser()
   return (
-    <p className={`font-medium ${className} ${size[fontSize]}`} {...rest}>
+    <p
+      className={`font-medium ${className} ${size[accessibility?.fontSize]}`}
+      {...rest}
+    >
       {children}
     </p>
   )

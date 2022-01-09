@@ -1,3 +1,5 @@
+import useUser from "hooks/useUser"
+
 const size = {
   xs: "text-xs",
   sm: "text-sm",
@@ -7,8 +9,11 @@ const size = {
 }
 
 export default function Span({ className, fontSize, children }) {
+  const { accessibility } = useUser()
   return (
-    <span className={`font-medium ${className} ${size[fontSize]}`}>
+    <span
+      className={`font-medium ${className} ${size[accessibility?.fontSize]}`}
+    >
       {children}
     </span>
   )
