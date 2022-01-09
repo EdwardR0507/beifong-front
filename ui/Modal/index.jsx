@@ -43,6 +43,18 @@ export default function Modal({ children, type, isOpen, setIsOpen }) {
             Comprar
           </Button>
         )
+      case "cita":
+        return (
+          <Button
+            variant="primary"
+            type="button"
+            size="medium"
+            onClick={openModal}
+            className="mt-10 mb-4"
+          >
+            Reservar cita
+          </Button>
+        )
       default:
         return (
           <Button
