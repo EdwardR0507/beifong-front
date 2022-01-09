@@ -87,6 +87,7 @@ export default function LoginPaciente() {
               <TextInput
                 name="password"
                 label="Contraseña"
+                type="password"
                 register={register}
                 errors={errors?.password}
               />

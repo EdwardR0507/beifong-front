@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 const sizing = {
-  lg: "h-80",
+  lg: "h-60",
   md: "h-40",
   sm: "h-20",
 }

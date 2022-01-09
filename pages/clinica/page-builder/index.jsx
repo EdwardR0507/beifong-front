@@ -9,15 +9,16 @@ import FileInput from "ui/FileInput"
 import SelectInput from "ui/SelectInput"
 import RadioGroup from "ui/RadioGroup"
 import TextareaInput from "ui/TextareaInput"
+import TextInput from "ui/TextInput"
 
 const schema = yup.object().shape({
   logo: yup.mixed().required("El logo es requerido"),
-  slogan: yup.string().required("El slogan es requerido"),
-  subslogan: yup.string().required("El subslogan es requerido"),
+  slogan: yup.string().required("El slogan es requerido").min(15),
+  subslogan: yup.string().required("El subslogan es requerido").min(25),
   image1: yup.mixed().required("La imagen es requerida"),
-  image1_position: yup.string().required("La posición es requerida"),
+  // image1_position: yup.string().required("La posición es requerida"),
   image2: yup.mixed().required("La imagen es requerida"),
-  image2_position: yup.string().required("La posición es requerida"),
+  // image2_position: yup.string().required("La posición es requerida"),
   description1: yup.string().required("La descripción es requerida"),
   description2: yup.string().required("La descripción es requerida"),
   initial_day: yup.string().required("El día inicial es requerido"),
@@ -44,10 +45,11 @@ export default function PageBuilder() {
   const logo = watch("logo")
   const slogan = watch("slogan")
   const subslogan = watch("subslogan")
+  const title1 = watch("title1")
   const image1 = watch("image1")
   const image1Position = watch("image1_position")
-  console.log(image1Position, "image1Position")
   const description1 = watch("description1")
+  const title2 = watch("title2")
   const image2 = watch("image2")
   const image2Position = watch("image2_position")
   const description2 = watch("description2")
@@ -58,14 +60,107 @@ export default function PageBuilder() {
   const initialMinute = watch("initial_minute")
   const finalMinute = watch("final_minute")
 
-  console.log(image1, "image1")
+  console.log(image2Position, "image2Position")
+
+  console.log(errors, "errors")
 
   const onSubmit = (data) => {
-    console.log(data)
+    const token = JSON.parse(window.localStorage.getItem("token"))
+
+    console.log(data, "data")
+
+    const section1 = {
+      title: data.title1,
+      description: data.description1,
+      img: data.image1[0],
+      imgPosition: data.image1_position,
+    }
+
+    const section2 = {
+      title: data.title2,
+      description: data.description2,
+      img: data.image2[0],
+      imgPosition: data.image2_position,
+    }
+
+    const information = {
+      slogan: data.slogan,
+      subslogan: data.subslogan,
+      startAttentionDay: data.initial_day,
+      endAttentionDay: data.final_day,
+      startAttentionTime: `${data.initial_hour}:${data.initial_minute}`,
+      endAttentionTime: `${data.final_hour}:${data.final_minute}`,
+      img: data.logo[0],
+    }
+
+    const updateClinicInfo = async (information) => {
+      const newFormdata = new FormData()
+
+      newFormdata.append("slogan", information.slogan)
+      newFormdata.append("subslogan", information.subslogan)
+      newFormdata.append("startAttentionDay", information.startAttentionDay)
+      newFormdata.append("endAttentionDay", information.endAttentionDay)
+      newFormdata.append("startAttentionTime", information.startAttentionTime)
+      newFormdata.append("endAttentionTime", information.endAttentionTime)
+      newFormdata.append("img", information.img)
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/information`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: newFormdata,
+          }
+        )
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const updateSection = async (sectionData) => {
+      const newFormdata = new FormData()
+
+      newFormdata.append("title", sectionData.title)
+      newFormdata.append("description", sectionData.description)
+      newFormdata.append("img", sectionData.img)
+      newFormdata.append("imgPosition", sectionData.imgPosition)
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/section`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: newFormdata,
+          }
+        )
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    updateClinicInfo(information)
+    updateSection(section1)
+    updateSection(section2)
   }
 
   return (
-    <div className="relative flex flex-col bg-sky-50 dark:bg-gray-800">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="relative flex flex-col bg-sky-50 dark:bg-gray-800"
+    >
+      <div className="fixed z-10 bg-white rounded-lg bottom-28 right-10 w-max dark:bg-gray-800">
+        <Button variant="tertiary">Guardar Datos</Button>
+      </div>
       <div className="absolute flex w-full min-h-screen bg-sky-50 dark:bg-gray-800">
         {showSideBar && (
           <aside className="w-1/4 min-h-screen bg-sky-50 dark:bg-gray-800"></aside>
@@ -135,9 +230,7 @@ export default function PageBuilder() {
             </section>
             <section
               className={`flex items-center h-screen px-10 justify-evenly bg-sky-300 dark:bg-sky-800 ${
-                image1Position?.name === "Derecha"
-                  ? "flex-row-reverse"
-                  : "flex-row"
+                image1Position === "right" ? "flex-row-reverse" : "flex-row"
               }`}
             >
               {image1?.length > 0 && (
@@ -153,9 +246,8 @@ export default function PageBuilder() {
               <p className="flex flex-col items-center px-10 py-8 rounded-lg max-w-prose bg-sky-200 dark:bg-gray-800">
                 <span className="mb-6 text-xl font-semibold">
                   <p className="flex items-center justify-center mb-10 text-2xl font-semibold">
-                    <span className="material-icons">work</span>
                     <span className="ml-2 text-4xl font-bold text-center uppercase">
-                      ¿Quiénes somos?
+                      {title1}
                     </span>
                   </p>
                   <span className="ml-2">{description1}</span>
@@ -164,9 +256,7 @@ export default function PageBuilder() {
             </section>
             <section
               className={`flex items-center h-screen px-10 justify-evenly bg-sky-50 dark:bg-gray-800 ${
-                image2Position?.name === "Derecha"
-                  ? "flex-row-reverse"
-                  : "flex-row"
+                image2Position === "right" ? "flex-row-reverse" : "flex-row"
               }`}
             >
               {image2?.length > 0 && (
@@ -182,9 +272,8 @@ export default function PageBuilder() {
               <p className="flex flex-col items-center px-10 py-8 rounded-lg max-w-prose bg-sky-200 dark:bg-sky-100 text-slate-700">
                 <span className="mb-6 text-xl font-semibold">
                   <p className="flex items-center justify-center mb-10 text-2xl font-semibold">
-                    <span className="material-icons">place</span>
                     <span className="ml-2 text-4xl font-bold text-center uppercase">
-                      Conozca nuestras instalaciones
+                      {title2}
                     </span>
                   </p>
                   <span className="ml-2">{description2}</span>
@@ -198,7 +287,7 @@ export default function PageBuilder() {
         className={`w-1/4 min-h-screen dark:bg-gray-700 bg-gray-100 transition-all duration-300 ease-in-out shadow-lg shadow-black/20 rounded-lg
         ${showSideBar ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <section>
           <div className="h-screen border-b border-gray-700">
             <div className="flex flex-col items-center justify-center">
               <Logo />
@@ -238,13 +327,13 @@ export default function PageBuilder() {
                 <SelectInput
                   name="initial_day"
                   options={[
-                    { value: "Lunes", label: "Lunes" },
-                    { value: "Martes", label: "Martes" },
-                    { value: "Miércoles", label: "Miércoles" },
-                    { value: "Jueves", label: "Jueves" },
-                    { value: "Viernes", label: "Viernes" },
-                    { value: "Sábado", label: "Sábado" },
-                    { value: "Domingo", label: "Domingo" },
+                    { value: "Monday", label: "Lunes" },
+                    { value: "Tuesday", label: "Martes" },
+                    { value: "Wednesday", label: "Miércoles" },
+                    { value: "Thursday", label: "Jueves" },
+                    { value: "Friday", label: "Viernes" },
+                    { value: "Saturday", label: "Sábado" },
+                    { value: "Sunday", label: "Domingo" },
                   ]}
                   {...register("initial_day")}
                   noLabel
@@ -253,13 +342,13 @@ export default function PageBuilder() {
                 <SelectInput
                   name="final_day"
                   options={[
-                    { value: "Lunes", label: "Lunes" },
-                    { value: "Martes", label: "Martes" },
-                    { value: "Miércoles", label: "Miércoles" },
-                    { value: "Jueves", label: "Jueves" },
-                    { value: "Viernes", label: "Viernes" },
-                    { value: "Sábado", label: "Sábado" },
-                    { value: "Domingo", label: "Domingo" },
+                    { value: "Monday", label: "Lunes" },
+                    { value: "Tuesday", label: "Martes" },
+                    { value: "Wednesday", label: "Miércoles" },
+                    { value: "Thursday", label: "Jueves" },
+                    { value: "Friday", label: "Viernes" },
+                    { value: "Saturday", label: "Sábado" },
+                    { value: "Sunday", label: "Domingo" },
                   ]}
                   {...register("final_day")}
                   noLabel
@@ -323,6 +412,14 @@ export default function PageBuilder() {
                 <span className="mb-6 ml-3 font-semibold text-gray-400">
                   Sección 2
                 </span>
+                <TextInput
+                  label="Título"
+                  name="title1"
+                  placeholder="Título"
+                  register={register}
+                  errors={errors.title1}
+                  size="sm"
+                />
                 <FileInput
                   errors={errors.image1}
                   register={register}
@@ -356,6 +453,14 @@ export default function PageBuilder() {
               <span className="mb-6 ml-3 font-semibold text-gray-400">
                 Sección 3
               </span>
+              <TextInput
+                label="Título"
+                name="title2"
+                placeholder="Título"
+                register={register}
+                errors={errors.title2}
+                size="sm"
+              />
               <FileInput
                 errors={errors.image2}
                 register={register}
@@ -383,7 +488,7 @@ export default function PageBuilder() {
               />
             </div>
           </div>
-        </form>
+        </section>
       </aside>
       <Button
         className="fixed top-0 right-0 mt-4 mr-4"
@@ -404,6 +509,6 @@ export default function PageBuilder() {
           />
         </svg>
       </Button>
-    </div>
+    </form>
   )
 }

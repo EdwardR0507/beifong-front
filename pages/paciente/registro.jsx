@@ -22,7 +22,7 @@ export default function RegistroPaciente() {
   const router = useRouter()
 
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(data)
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/patients/`,
       {
@@ -30,10 +30,10 @@ export default function RegistroPaciente() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       }
     )
-    const json = await res.json();
+    const json = await res.json()
     console.log(json)
   }
 
@@ -81,6 +81,7 @@ export default function RegistroPaciente() {
               />
               <TextInput
                 name="password"
+                type="password"
                 label="Contraseña"
                 register={register}
                 errors={errors?.password}

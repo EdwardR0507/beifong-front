@@ -43,6 +43,16 @@ export default function ClinicApp() {
           >
             Ir a constructor de página
           </Button>
+          <Button
+            className="mt-4"
+            onClick={() => {
+              router.push("/clinica/medicos")
+            }}
+            size="large"
+            variant="secondary"
+          >
+            Crear médicos
+          </Button>
         </section>
       </main>
     </div>

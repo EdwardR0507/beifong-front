@@ -20,7 +20,13 @@ export default function RadioGroup({ options, setValue }) {
           value={selected}
           onChange={(value) => {
             setSelected(value)
-            setValue(value)
+            if (value.name === "Izquierda") {
+              console.log("Izquierda")
+              setValue("left")
+            } else {
+              console.log("Derecha")
+              setValue("right")
+            }
           }}
         >
           <HeadlessRadioGroup.Label className="sr-only">

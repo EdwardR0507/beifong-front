@@ -40,7 +40,7 @@ export default function LoginClinica() {
       console.log(json)
       if (json.ok) {
         window.localStorage.setItem("token", JSON.stringify(json.token))
-        router.push("/suscripciones")
+        router.push("/clinica/suscripciones")
       } else {
         console.log(json)
         setError(json)
@@ -105,7 +105,7 @@ export default function LoginClinica() {
                       key={err.msg}
                       className="px-4 py-2 mt-2 ml-4 text-center text-white bg-rose-600"
                     >
-                      {err.msg}
+                      {err.error}
                     </div>
                   ))
                 ) : (
