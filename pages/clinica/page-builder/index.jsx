@@ -10,6 +10,7 @@ import SelectInput from "ui/SelectInput"
 import RadioGroup from "ui/RadioGroup"
 import TextareaInput from "ui/TextareaInput"
 import TextInput from "ui/TextInput"
+import { daysToSpanish } from "utils/constants"
 
 const schema = yup.object().shape({
   logo: yup.mixed().required("El logo es requerido"),
@@ -203,7 +204,7 @@ export default function PageBuilder() {
                         Días
                       </span>
                       <span className="ml-2">
-                        {initialDay} a {finalDay}
+                        {daysToSpanish(initialDay)} a {daysToSpanish(finalDay)}
                       </span>
                     </p>
                     <p className="flex justify-between w-full mb-6 text-xl font-semibold">
