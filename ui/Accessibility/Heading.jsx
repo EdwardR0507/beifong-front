@@ -1,3 +1,5 @@
+import useUser from "hooks/useUser"
+
 const sizeH1 = {
   xs: "text-xl",
   sm: "text-2xl",
@@ -23,20 +25,29 @@ const sizeH3 = {
 }
 
 function H1({ className, fontSize = "base", children }) {
+  const { accessibility } = useUser()
   return (
-    <h1 className={`font-bold ${className} ${sizeH1[fontSize]}`}>{children}</h1>
+    <h1 className={`font-bold ${className} ${sizeH1[accessibility?.fontSize]}`}>
+      {children}
+    </h1>
   )
 }
 
 function H2({ className, fontSize = "base", children }) {
+  const { accessibility } = useUser()
   return (
-    <h2 className={`font-bold ${className} ${sizeH2[fontSize]}`}>{children}</h2>
+    <h2 className={`font-bold ${className} ${sizeH2[accessibility?.fontSize]}`}>
+      {children}
+    </h2>
   )
 }
 
 function H3({ className, fontSize = "base", children }) {
+  const { accessibility } = useUser()
   return (
-    <h3 className={`font-bold ${className} ${sizeH3[fontSize]}`}>{children}</h3>
+    <h3 className={`font-bold ${className} ${sizeH3[accessibility?.fontSize]}`}>
+      {children}
+    </h3>
   )
 }
 
