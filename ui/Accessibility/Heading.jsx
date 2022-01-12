@@ -24,31 +24,33 @@ const sizeH3 = {
   xl: "text-3xl",
 }
 
-function H1({ className, fontSize = "base", children }) {
+function H1({ className, fontSize = "base", example, children }) {
   const { accessibility } = useUser()
-  return (
-    <h1 className={`font-bold ${className} ${sizeH1[accessibility?.fontSize]}`}>
-      {children}
-    </h1>
-  )
+  const fontStyles = example
+    ? sizeH1[fontSize]
+    : sizeH1[accessibility?.fontSize]
+
+  return <h1 className={`font-bold ${className} ${fontStyles}`}>{children}</h1>
 }
 
-function H2({ className, fontSize = "base", children }) {
+function H2({ className, fontSize = "base", example, children }) {
   const { accessibility } = useUser()
-  return (
-    <h2 className={`font-bold ${className} ${sizeH2[accessibility?.fontSize]}`}>
-      {children}
-    </h2>
-  )
+  const fontStyles = example
+    ? sizeH2[fontSize]
+    : sizeH2[accessibility?.fontSize]
+
+  console.log(fontStyles)
+
+  return <h2 className={`font-bold ${className} ${fontStyles}`}>{children}</h2>
 }
 
-function H3({ className, fontSize = "base", children }) {
+function H3({ className, fontSize = "base", example, children }) {
   const { accessibility } = useUser()
-  return (
-    <h3 className={`font-bold ${className} ${sizeH3[accessibility?.fontSize]}`}>
-      {children}
-    </h3>
-  )
+  const fontStyles = example
+    ? sizeH3[fontSize]
+    : sizeH3[accessibility?.fontSize]
+
+  return <h3 className={`font-bold ${className} ${fontStyles}`}>{children}</h3>
 }
 
 export default {

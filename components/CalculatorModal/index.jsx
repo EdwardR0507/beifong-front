@@ -53,6 +53,7 @@ export default function CalculatorModal({ type }) {
   const { register, watch, handleSubmit, setValue } = useForm()
   const currentTheme = theme === "system" ? systemTheme : theme
   const fontSize = watch("fontSize")
+  console.log(fontSize)
 
   useEffect(() => {
     if (accessibility) {
@@ -169,10 +170,16 @@ export default function CalculatorModal({ type }) {
                 onInput={update}
                 className="text-base leading-tight text-gray-700 dark:text-gray-300"
               >
-                <Heading.H1 fontSize={size[fontSize]}>H1 Título</Heading.H1>
-                <Heading.H2 fontSize={size[fontSize]}>H2 Título</Heading.H2>
-                <Heading.H3 fontSize={size[fontSize]}>H3 Título</Heading.H3>
-                <Paragraph fontSize={size[fontSize]}>
+                <Heading.H1 fontSize={size[fontSize]} example>
+                  H1 Título
+                </Heading.H1>
+                <Heading.H2 fontSize={size[fontSize]} example>
+                  H2 Título
+                </Heading.H2>
+                <Heading.H3 fontSize={size[fontSize]} example>
+                  H3 Título
+                </Heading.H3>
+                <Paragraph fontSize={size[fontSize]} example>
                   Digitaliza la gestión completa de tu clínica. Páginas de
                   presentación, sistema de citas, de planes personalizados y
                   mucho más.

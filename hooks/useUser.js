@@ -19,8 +19,11 @@ export default function useUser(role) {
     // if (!user) {
     //   router.push(`/${role}/login`)
     // } else {
-    setUser(JSON.parse(user))
-    setAccessibility(JSON.parse(accessibility))
+
+    if (accessibility) {
+      setUser(JSON.parse(user))
+      setAccessibility(JSON.parse(accessibility))
+    }
     // }
   }, [reloadUser])
 
