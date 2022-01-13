@@ -8,6 +8,8 @@ export const daysToSpanish = {
   Sunday: "Domingo",
 }
 
+// Clinics
+
 export const clinicHeaders = [
   {
     id: 1,
@@ -289,5 +291,55 @@ export const fakeClinicData = [
     name: "Clinica San Martín",
     address: "Av. San Martín 589",
     phone: "0221-1234567",
+  },
+]
+
+// Medics
+
+export const medicHeaders = [
+  {
+    id: 1,
+    name: "Imagen",
+  },
+  {
+    id: 2,
+    name: "Nombre",
+  },
+  {
+    id: 3,
+    name: "Apellido",
+  },
+  {
+    id: 4,
+    name: "Especialidad",
+  },
+  {
+    id: 5,
+    name: "Costo de Atención",
+  },
+  {
+    id: 6,
+    name: "Email",
+  },
+  {
+    id: 7,
+    name: "Acciones",
+  },
+]
+
+// Patients
+
+export const patientHeaders = [
+  {
+    id: 1,
+    name: "Nombre",
+  },
+  {
+    id: 2,
+    name: "Email",
+  },
+  {
+    id: 4,
+    name: "Acciones",
   },
 ]

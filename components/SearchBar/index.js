@@ -22,7 +22,7 @@ export default function SearchBar({
             register={register}
           />
         </div>
-        <Button className="h-12 " type="submit">
+        <Button className="h-12 mt-3" type="submit">
           Buscar
         </Button>
       </form>

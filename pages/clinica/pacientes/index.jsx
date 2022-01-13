@@ -1,14 +1,14 @@
-import TableData from "components/TableData"
 import { useEffect, useState } from "react"
-import { clinicHeaders } from "utils/constants"
+import { patientHeaders } from "utils/constants"
+import TableData from "components/TableData"
 
 export default function PatientApp({ updateTooltip }) {
-  const [clinics, setClinics] = useState([])
+  const [patients, setPatients] = useState([])
 
-  const fetchClinics = async () => {
+  const fetchPatients = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics`,
+        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/patients`,
         {
           method: "GET",
           headers: {
@@ -18,7 +18,7 @@ export default function PatientApp({ updateTooltip }) {
       )
       if (response.ok) {
         const data = await response.json()
-        setClinics(data.clinics)
+        setPatients(data.patients)
       }
     } catch (error) {
       console.log(error)
@@ -26,17 +26,17 @@ export default function PatientApp({ updateTooltip }) {
   }
 
   useEffect(() => {
-    fetchClinics()
+    fetchPatients()
   }, [])
 
   return (
     <TableData
       updateTooltip={updateTooltip}
-      type="Clínicas"
-      data={clinics}
-      gridTemplateHeader="grid-cols-5"
-      gridTemplateMDContent="md:grid-cols-5"
-      headerType={clinicHeaders}
+      type="Pacientes"
+      data={patients}
+      gridTemplateHeader="grid-cols-3"
+      gridTemplateMDContent="md:grid-cols-3"
+      headerType={patientHeaders}
     />
   )
 }
