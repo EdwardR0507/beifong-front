@@ -8,8 +8,8 @@ export default function ClinicRow({ data: clinic }) {
   return (
     <section className="grid grid-cols-2 mt-8 rounded md:mt-0 md:grid-cols-1">
       <Headers.Mobile headers={clinicHeaders} />
-      <div className="grid text-sm bg-gray-100 dark:bg-gray-700 md:border-b md:grid-cols-5">
-        <Span className="flex items-center justify-end h-16 px-4 text-right break-words border-b md:text-left md:justify-center md:h-20 md:border-none">
+      <div className="grid text-sm bg-gray-100 dark:bg-gray-700 md:border-b md:grid-cols-5 text-right md:text-center">
+        <Span className="flex items-center justify-end h-16 px-4 break-words border-b md:text-left md:justify-center md:h-20 md:border-none">
           {clinic?.name}
         </Span>
         <Span className="flex items-center justify-end h-16 px-4 border-b md:justify-center md:h-20 md:border-none">
