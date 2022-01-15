@@ -1,5 +1,6 @@
 import SubscriptionCard from "components/SubscriptionCard"
 import { useRouter } from "next/router"
+import Button from "ui/Button"
 
 export default function Suscripciones() {
   let token
@@ -66,7 +67,7 @@ export default function Suscripciones() {
       )
       const json = res.json()
       console.log(json)
-      router.push("/clinica/page-builder")
+      router.push("/clinica/app")
     } catch (error) {
       console.log(error)
     }
@@ -119,6 +120,15 @@ export default function Suscripciones() {
           </SubscriptionCard>
         </section>
       </main>
+      <div>
+        <Button
+          className="mb-10"
+          variant="tertiary"
+          onClick={() => router.push("/clinica/app")}
+        >
+          Ir a la aplicación
+        </Button>
+      </div>
     </div>
   )
 }

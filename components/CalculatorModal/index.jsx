@@ -11,6 +11,7 @@ import Button from "ui/Button"
 import Modal from "ui/Modal"
 import useTooltip from "hooks/useTooltip"
 import AccessibilityTooltip from "components/AccessibilityTooltip"
+import { useRouter } from "next/router"
 
 const size = {
   1: "xs",
@@ -29,6 +30,7 @@ const invertedSize = {
 }
 
 export default function CalculatorModal({ type }) {
+  const router = useRouter()
   const [rangeRef, setRangeRef] = useState(null)
   const [isPopperOpen, setIsPopperOpen] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -53,11 +55,9 @@ export default function CalculatorModal({ type }) {
   const { register, watch, handleSubmit, setValue } = useForm()
   const currentTheme = theme === "system" ? systemTheme : theme
   const fontSize = watch("fontSize")
-  console.log(fontSize)
 
   useEffect(() => {
     if (accessibility) {
-      console.log("accessibility", accessibility)
       setValue("fontSize", invertedSize[accessibility?.fontSize])
       setIsHighContrast(accessibility?.highContrast)
       setIsHighlighted(accessibility?.highlightText)
@@ -65,7 +65,16 @@ export default function CalculatorModal({ type }) {
     }
   }, [accessibility])
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const token = JSON.parse(window.localStorage.getItem("token"))
+    console.log(token)
+    const path = router.pathname
+    const role = path.includes("clinica")
+      ? "clinics"
+      : path.includes("medico")
+      ? "medics"
+      : "patients"
+
     const settings = {
       highContrast: isHighContrast,
       highlightText: isHighlighted,
@@ -74,9 +83,37 @@ export default function CalculatorModal({ type }) {
       darkMode: theme === "dark",
     }
 
+    const newFormData = new FormData()
+    newFormData.append("highContrast", settings.highContrast)
+    newFormData.append("highlightText", settings.highlightText)
+    newFormData.append("textToVoice", settings.textToVoice)
+    newFormData.append("fontSize", settings.fontSize)
+    newFormData.append("darkMode", settings.darkMode)
+
+    const setAccessibility = async () => {
+      console.log("entraaa")
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/${role}/accesibility`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: newFormData,
+          }
+        )
+        const json = await res.json()
+        console.log(json, "holi")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     console.log(settings, "settings")
 
     window.localStorage.setItem("accessibility", JSON.stringify(settings))
+    setAccessibility()
     setReloadUser(!reloadUser)
     setIsOpen(false)
   }

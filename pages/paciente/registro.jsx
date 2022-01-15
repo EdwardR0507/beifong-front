@@ -35,6 +35,8 @@ export default function RegistroPaciente() {
     )
     const json = await res.json()
     console.log(json)
+    window.localStorage.setItem("email", JSON.stringify(data.email))
+    router.push("/paciente/confirmation")
   }
 
   console.log(errors, "errors")

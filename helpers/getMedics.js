@@ -1,8 +1,8 @@
 export const getMedics = async () => {
   try {
-    const clinicId = JSON.parse(window.localStorage.getItem("clinicId"))
+    const clinic = JSON.parse(window.localStorage.getItem("clinic"))
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/medics/${clinicId}/clinics`,
+      `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/medics/${clinic.clinicId}/clinics`,
       {
         method: "GET",
         headers: {
