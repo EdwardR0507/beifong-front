@@ -5,11 +5,12 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Button from "ui/Button"
 import { actualizacionSchema } from "schemas/medico/actualizacion"
 import { useTheme } from "next-themes"
-import { injectStyle } from "react-toastify/dist/inject-style";
-import { ToastContainer, toast } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style"
+import { ToastContainer, toast } from "react-toastify"
+import { useRouter } from "next/router"
 
 if (typeof window !== "undefined") {
-  injectStyle();
+  injectStyle()
 }
 
 export default function ActualizarFecha() {
@@ -41,10 +42,9 @@ export default function ActualizarFecha() {
       })
       .then((res) => res.json())
       .then((resJSON) => {
-        if(resJSON.ok){
+        if (resJSON.ok) {
           toast.success(resJSON.msg)
-        }
-        else{
+        } else {
           toast.error(resJSON.msg)
         }
       })

@@ -12,6 +12,7 @@ import TextInput from "ui/TextInput"
 import { daysToSpanish } from "utils/constants"
 import { injectStyle } from "react-toastify/dist/inject-style";
 import { ToastContainer, toast } from "react-toastify"
+import AccessibilityButton from "ui/Accessibility/Button"
 
 if (typeof window !== "undefined") {
   injectStyle();

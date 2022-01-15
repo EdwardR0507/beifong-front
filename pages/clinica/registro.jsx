@@ -9,11 +9,11 @@ import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { useTheme } from "next-themes"
 import { useState } from "react"
-import { injectStyle } from "react-toastify/dist/inject-style";
-import { ToastContainer, toast } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style"
+import { ToastContainer, toast } from "react-toastify"
 
 if (typeof window !== "undefined") {
-  injectStyle();
+  injectStyle()
 }
 
 export default function RegistroClinica() {
@@ -43,14 +43,12 @@ export default function RegistroClinica() {
         }
       )
       const json = await res.json()
-      //console.log(json)
       if (json.ok) {
         window.localStorage.setItem("clinicId", JSON.stringify(json.clinicId))
         window.localStorage.setItem("email", JSON.stringify(data.email))
         router.push("/clinica/confirmation")
-      }
-      else{
-        json.errors.map(error => {
+      } else {
+        json.errors.forEach((error) => {
           toast.error(error.msg)
         })
       }

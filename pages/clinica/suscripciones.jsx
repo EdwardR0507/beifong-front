@@ -1,10 +1,11 @@
 import SubscriptionCard from "components/SubscriptionCard"
 import { useRouter } from "next/router"
-import { injectStyle } from "react-toastify/dist/inject-style";
+import { injectStyle } from "react-toastify/dist/inject-style"
 import { ToastContainer, toast } from "react-toastify"
+import AccessibilityButton from "ui/Accessibility/Button"
 
 if (typeof window !== "undefined") {
-  injectStyle();
+  injectStyle()
 }
 
 export default function Suscripciones() {
@@ -34,7 +35,7 @@ export default function Suscripciones() {
       )
       const json = res.json()
       console.log(json)
-      if(!json.ok){
+      if (!json.ok) {
         toast.error(json.msg)
       }
       router.push("/clinica/app")
@@ -97,6 +98,7 @@ export default function Suscripciones() {
           variant="tertiary"
           onClick={() => router.push("/clinica/app")}
         >
+          {" "}
           Ir a la aplicación
         </AccessibilityButton>
       </div>
