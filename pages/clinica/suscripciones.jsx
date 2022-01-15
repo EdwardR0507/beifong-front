@@ -1,47 +1,10 @@
 import SubscriptionCard from "components/SubscriptionCard"
 import { useRouter } from "next/router"
+import AccessibilityButton from "ui/Accessibility/Button"
 
 export default function Suscripciones() {
   let token
   const router = useRouter()
-
-  // useEffect(() => {
-  //   const clinicId = window.localStorage.getItem("clinicId")
-
-  //   const getClinic = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/${clinicId}`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       )
-  //       const json = await res.json()
-  //       if (json.ok) {
-  //         console.log(json)
-  //       } else {
-  //         console.log(json)
-  //       }
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-
-  //   if (clinicId) {
-  //     getClinic()
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   const token = window.localStorage.getItem("token")
-  //   if (token) {
-  //     router.push("/clinica/page-builder")
-  //   }
-  // }, [])
 
   const onSubmit = async (mount, subscriptionType) => {
     if (typeof window !== "undefined") {
@@ -66,7 +29,7 @@ export default function Suscripciones() {
       )
       const json = res.json()
       console.log(json)
-      router.push("/clinica/page-builder")
+      router.push("/clinica/app")
     } catch (error) {
       console.log(error)
     }
@@ -119,6 +82,15 @@ export default function Suscripciones() {
           </SubscriptionCard>
         </section>
       </main>
+      <div>
+        <AccessibilityButton
+          className="mb-10"
+          variant="tertiary"
+          onClick={() => router.push("/clinica/app")}
+        >
+          Ir a la aplicación
+        </AccessibilityButton>
+      </div>
     </div>
   )
 }

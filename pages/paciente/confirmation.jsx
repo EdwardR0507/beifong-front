@@ -19,7 +19,7 @@ export default function ClinicConfirmation() {
     const verifyClinic = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/verify?token=${token}`,
+          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/patients/verify?token=${token}`,
           {
             method: "PUT",
             headers: {
@@ -30,7 +30,7 @@ export default function ClinicConfirmation() {
         const json = await res.json()
         if (json.ok) {
           window.localStorage.setItem("token", JSON.stringify(json.token))
-          router.push("/clinica/suscripciones")
+          router.push("/paciente/app")
         } else {
           console.log(json)
           setError(json)

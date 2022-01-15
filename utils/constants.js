@@ -1,3 +1,6 @@
+export const TRITANOPIA = "tritanopia"
+export const DEUTERANOPIA_PROTANOPIA = "deuteranopia/protanopia"
+
 export const daysToSpanish = {
   Monday: "Lunes",
   Tuesday: "Martes",
@@ -7,6 +10,66 @@ export const daysToSpanish = {
   Saturday: "Sábado",
   Sunday: "Domingo",
 }
+
+// Appointments
+
+export const appointmentHeaders = [
+  {
+    id: 1,
+    name: "Clínica",
+  },
+  {
+    id: 2,
+    name: "Dirección",
+  },
+  {
+    id: 3,
+    name: "Teléfono",
+  },
+  {
+    id: 4,
+    name: "Médico",
+  },
+  {
+    id: 5,
+    name: "Especialidad",
+  },
+  {
+    id: 6,
+    name: "Fecha",
+  },
+  {
+    id: 7,
+    name: "Acciones",
+  },
+]
+
+export const appointmentClinicHeaders = [
+  {
+    id: 1,
+    name: "Paciente",
+  },
+  {
+    id: 2,
+    name: "Correeo",
+  },
+  {
+    id: 4,
+    name: "Médico",
+  },
+  {
+    id: 5,
+    name: "Especialidad",
+  },
+  {
+    id: 6,
+    name: "Fecha",
+  },
+  {
+    id: 7,
+    name: "Acciones",
+  },
+]
 
 // Clinics
 

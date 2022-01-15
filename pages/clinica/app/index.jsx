@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import Button from "ui/Button"
+import AccessibilityButton from "ui/Accessibility/Button"
 import Logo from "ui/Logo"
 
 export default function ClinicApp() {
@@ -23,7 +23,7 @@ export default function ClinicApp() {
           <span className="mb-6 text-4xl font-semibold">
             ¡Bienvenido a Beifong!
           </span>
-          <Button
+          <AccessibilityButton
             onClick={() => {
               window.localStorage.removeItem("token")
               router.push("/clinica/login")
@@ -32,8 +32,8 @@ export default function ClinicApp() {
             variant="danger"
           >
             Cerrar sesión
-          </Button>
-          <Button
+          </AccessibilityButton>
+          <AccessibilityButton
             className="mt-4"
             onClick={() => {
               router.push("/clinica/page-builder")
@@ -42,8 +42,8 @@ export default function ClinicApp() {
             variant="primary"
           >
             Ir a constructor de página
-          </Button>
-          <Button
+          </AccessibilityButton>
+          <AccessibilityButton
             className="mt-4"
             onClick={() => {
               router.push("/clinica/medicos/crear")
@@ -52,8 +52,8 @@ export default function ClinicApp() {
             variant="secondary"
           >
             Crear médicos
-          </Button>
-          <Button
+          </AccessibilityButton>
+          <AccessibilityButton
             className="mt-4"
             onClick={() => {
               router.push("/clinica/medicos")
@@ -62,7 +62,17 @@ export default function ClinicApp() {
             variant="tertiary"
           >
             Listar médicos
-          </Button>
+          </AccessibilityButton>
+          <AccessibilityButton
+            className="mt-4"
+            onClick={() => {
+              router.push("/clinica/citas")
+            }}
+            size="large"
+            variant="quaternary"
+          >
+            Listar citas
+          </AccessibilityButton>
         </section>
       </main>
     </div>
