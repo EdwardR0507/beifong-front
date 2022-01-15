@@ -13,7 +13,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <UserProvider>
         <ThemeProvider attribute="class">
-          {router.pathname.includes("/paciente") ? (
+          {router.pathname.includes("paciente") ||
+          router.pathname.includes("clinica") ||
+          router.pathname.includes("medico") ? (
             <AccessibilityLayout
               component={Component}
               pageProps={{ ...pageProps, session }}

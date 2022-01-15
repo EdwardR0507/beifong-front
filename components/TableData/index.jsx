@@ -6,6 +6,8 @@ import Logo from "ui/Logo"
 import PatientRow from "components/PatientRow"
 import MedicRow from "components/MedicRow"
 import ClinicRow from "components/ClinicRow"
+import CitaRow from "components/CitaRow"
+import CitaClinicaRow from "components/CitaClinicaRow"
 
 export default function TableData({
   updateTooltip,
@@ -64,6 +66,10 @@ export default function TableData({
                   return <MedicRow key={el.email} data={el} />
                 case "Clínicas":
                   return <ClinicRow key={el.email} data={el} />
+                case "Citas":
+                  return <CitaRow key={el.email} data={el} />
+                case "Citas de clínica":
+                  return <CitaClinicaRow key={el.email} data={el} />
                 default:
                   return null
               }

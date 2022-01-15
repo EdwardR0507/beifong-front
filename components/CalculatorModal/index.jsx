@@ -1,5 +1,6 @@
 import { Dialog } from "@headlessui/react"
 import AccessibilityButton from "components/AccessibilityButton"
+import AccessibilityButton2 from "ui/Accessibility/Button"
 import { UserContext } from "context/UserContext"
 import { useTextToSpeech } from "hooks/useTextToSpeech"
 import { useTheme } from "next-themes"
@@ -7,7 +8,6 @@ import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import Heading from "ui/Accessibility/Heading"
 import Paragraph from "ui/Accessibility/Paragraph"
-import Button from "ui/Button"
 import Modal from "ui/Modal"
 import useTooltip from "hooks/useTooltip"
 import AccessibilityTooltip from "components/AccessibilityTooltip"
@@ -36,6 +36,7 @@ export default function CalculatorModal({ type }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false)
   const [isHighContrast, setIsHighContrast] = useState(false)
+  const [visualDisease, setVisualDisease] = useState("healthy-vision")
   const { accessibility, reloadUser, setReloadUser } = useContext(UserContext)
   const {
     isTextToSpeech,
@@ -62,6 +63,7 @@ export default function CalculatorModal({ type }) {
       setIsHighContrast(accessibility?.highContrast)
       setIsHighlighted(accessibility?.highlightText)
       setIsTextToSpeech(accessibility?.textToVoice)
+      setVisualDisease(accessibility?.visualDisease)
     }
   }, [accessibility])
 
@@ -81,6 +83,7 @@ export default function CalculatorModal({ type }) {
       textToVoice: isTextToSpeech,
       fontSize: size[data.fontSize],
       darkMode: theme === "dark",
+      visualDisease: visualDisease,
     }
 
     const newFormData = new FormData()
@@ -89,6 +92,7 @@ export default function CalculatorModal({ type }) {
     newFormData.append("textToVoice", settings.textToVoice)
     newFormData.append("fontSize", settings.fontSize)
     newFormData.append("darkMode", settings.darkMode)
+    newFormData.append("visualDisease", settings.visualDisease)
 
     const setAccessibility = async () => {
       console.log("entraaa")
@@ -201,39 +205,59 @@ export default function CalculatorModal({ type }) {
                 handleSpeak={handleSpeak}
                 setIsPopperOpen={setIsPopperOpen}
               />
-              <div
-                onMouseUp={update}
-                onKeyDown={update}
-                onInput={update}
-                className="text-base leading-tight text-gray-700 dark:text-gray-300"
-              >
-                <Heading.H1 fontSize={size[fontSize]} example>
-                  H1 Título
-                </Heading.H1>
-                <Heading.H2 fontSize={size[fontSize]} example>
-                  H2 Título
-                </Heading.H2>
-                <Heading.H3 fontSize={size[fontSize]} example>
-                  H3 Título
-                </Heading.H3>
-                <Paragraph fontSize={size[fontSize]} example>
-                  Digitaliza la gestión completa de tu clínica. Páginas de
-                  presentación, sistema de citas, de planes personalizados y
-                  mucho más.
-                </Paragraph>
+              <div>
+                <div
+                  onMouseUp={update}
+                  onKeyDown={update}
+                  onInput={update}
+                  className="text-base leading-tight text-gray-700 dark:text-gray-300"
+                >
+                  <Heading.H1 fontSize={size[fontSize]} example>
+                    H1 Título
+                  </Heading.H1>
+                  <Heading.H2 fontSize={size[fontSize]} example>
+                    H2 Título
+                  </Heading.H2>
+                  <Heading.H3 fontSize={size[fontSize]} example>
+                    H3 Título
+                  </Heading.H3>
+                  <Paragraph fontSize={size[fontSize]} example>
+                    Digitaliza la gestión completa de tu clínica.
+                  </Paragraph>
+                </div>
+                <div className="grid grid-cols-2 gap-6 mt-8">
+                  <AccessibilityButton
+                    onClick={() => setVisualDisease("tritanopia")}
+                    isActive={visualDisease === "tritanopia"}
+                    label="Tritanopia"
+                    iconName="visibility"
+                  />
+                  <AccessibilityButton
+                    onClick={() => setVisualDisease("deuteranopia/protanopia")}
+                    isActive={visualDisease === "deuteranopia/protanopia"}
+                    label="Protanopia o Deuteranopia"
+                    iconName="visibility"
+                  />
+                  <AccessibilityButton
+                    onClick={() => setVisualDisease("healthy-vision")}
+                    isActive={visualDisease === "healthy-vision"}
+                    label="Visión normal"
+                    iconName="visibility"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="flex justify-center mt-4">
-          <Button
+          <AccessibilityButton2
             type="submit"
             variant="primary"
             size="large"
             // onClick={handleSaveSettings}
           >
             Guardar configuración
-          </Button>
+          </AccessibilityButton2>
         </div>
       </form>
     </Modal>

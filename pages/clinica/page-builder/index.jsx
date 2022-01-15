@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
-import Button from "ui/Button"
 import Logo from "ui/Logo"
 import * as yup from "yup"
 import Image from "next/image"
@@ -11,10 +10,11 @@ import RadioGroup from "ui/RadioGroup"
 import TextareaInput from "ui/TextareaInput"
 import TextInput from "ui/TextInput"
 import { daysToSpanish } from "utils/constants"
+import AccessibilityButton from "ui/Accessibility/Button"
 
 const schema = yup.object().shape({
   slogan: yup.string().required("El slogan es requerido").min(15),
-  subslogan: yup.string().required("El subslogan es requerido").min(25),
+  subSlogan: yup.string().required("El subslogan es requerido").min(25),
   startAttentionDay: yup.string().required("El día inicial es requerido"),
   endAttentionDay: yup.string().required("El día final es requerido"),
   initial_hour: yup.string().required("La hora inicial es requerida"),
@@ -67,7 +67,7 @@ export default function PageBuilder() {
   }
 
   const slogan = watch("slogan")
-  const subslogan = watch("subslogan")
+  const subSlogan = watch("subSlogan")
   const startAttentionDay = watch("startAttentionDay")
   const endAttentionDay = watch("endAttentionDay")
   const initialHour = watch("initial_hour")
@@ -95,7 +95,7 @@ export default function PageBuilder() {
       const newFormdata = new FormData()
 
       newFormdata.append("slogan", data.slogan)
-      newFormdata.append("subslogan", data.subslogan)
+      newFormdata.append("subSlogan", data.subSlogan)
       newFormdata.append("startAttentionDay", data.startAttentionDay)
       newFormdata.append("endAttentionDay", data.endAttentionDay)
       newFormdata.append(
@@ -155,7 +155,9 @@ export default function PageBuilder() {
       className="relative flex flex-col bg-sky-50 dark:bg-gray-800"
     >
       <div className="fixed z-10 bg-white rounded-lg bottom-28 right-10 w-max dark:bg-gray-800">
-        <Button variant="tertiary">Guardar Datos</Button>
+        <AccessibilityButton variant="tertiary">
+          Guardar Datos
+        </AccessibilityButton>
       </div>
       <div className="absolute flex w-full min-h-screen bg-sky-50 dark:bg-gray-800">
         {showSideBar && (
@@ -180,11 +182,14 @@ export default function PageBuilder() {
                 <article className="flex flex-col items-center max-w-prose">
                   <span className="mb-6 text-5xl font-bold">{slogan}</span>
                   <span className="my-6 text-xl font-semibold">
-                    {subslogan}
+                    {subSlogan}
                   </span>
-                  <Button className="w-2/4 mt-6" variant="tertiary">
+                  <AccessibilityButton
+                    className="w-2/4 mt-6"
+                    variant="tertiary"
+                  >
                     Realizar consulta
-                  </Button>
+                  </AccessibilityButton>
                 </article>
                 <article className="px-16 py-10 bg-white rounded-lg shadow-lg dark:bg-sky-100">
                   <div className="flex flex-col items-center dark:text-slate-700">
@@ -218,9 +223,12 @@ export default function PageBuilder() {
                       </span>
                       <span className="ml-2">+51 999 999 999</span>
                     </p>
-                    <Button className="w-2/4 mt-4" variant="secondary">
+                    <AccessibilityButton
+                      className="w-2/4 mt-4"
+                      variant="secondary"
+                    >
                       Contacto
-                    </Button>
+                    </AccessibilityButton>
                   </div>
                 </article>
               </div>
@@ -252,7 +260,7 @@ export default function PageBuilder() {
                   <p
                     className={`flex flex-col items-center px-10 py-8 rounded-lg max-w-prose ${
                       index % 2 === 0
-                        ? "bg-sky-300 dark:bg-gray-800"
+                        ? "bg-sky-50 dark:bg-gray-800"
                         : "bg-sky-200 dark:bg-sky-100 text-slate-700"
                     }`}
                   >
@@ -270,7 +278,7 @@ export default function PageBuilder() {
             })}
             {showSideBar && (
               <div className="flex flex-col items-center justify-center pr-60 py-14 md:flex-row">
-                <Button
+                <AccessibilityButton
                   className="mb-4 h-max md:w-auto md:mr-8 md:mb-0"
                   type="button"
                   variant="secondary"
@@ -278,8 +286,8 @@ export default function PageBuilder() {
                   disabled={fields.length > 7}
                 >
                   Agregar +
-                </Button>
-                <Button
+                </AccessibilityButton>
+                <AccessibilityButton
                   className="mb-4 h-max md:w-auto md:mr-8 md:mb-0"
                   type="button"
                   variant="danger"
@@ -287,7 +295,7 @@ export default function PageBuilder() {
                   disabled={fields.length === 1}
                 >
                   Quitar -
-                </Button>
+                </AccessibilityButton>
               </div>
             )}
           </main>
@@ -475,7 +483,8 @@ export default function PageBuilder() {
           })}
         </section>
       </aside>
-      <Button
+      <AccessibilityButton
+        variant="primary"
         className="fixed top-0 right-0 mt-4 mr-4"
         onClick={() => setShowSideBar(!showSideBar)}
       >
@@ -493,7 +502,7 @@ export default function PageBuilder() {
             d="M4 6h16M4 12h16M4 18h16"
           />
         </svg>
-      </Button>
+      </AccessibilityButton>
     </form>
   )
 }

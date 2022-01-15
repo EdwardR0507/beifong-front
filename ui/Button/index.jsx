@@ -8,6 +8,8 @@ const styles = {
     "bg-emerald-500 text-white shadow-lg hover:shadow-emerald-800/50 shadow-emerald-500/40 hover:bg-emerald-700",
   tertiary:
     "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700",
+  quaternary:
+    "bg-orange-500 text-white shadow-lg hover:shadow-orange-800/50 shadow-orange-500/40 hover:bg-orange-700",
   danger:
     "bg-rose-500 text-white shadow-lg hover:shadow-rose-800/50 shadow-rose-500/40 hover:bg-rose-700",
 }
