@@ -97,6 +97,15 @@ export default function Home() {
                 Ver suscripciones
               </Button>
               <CalculatorModal type="tryWidget" />
+              <Button
+                onClick={() => {
+                  router.push("/medico/login")
+                }}
+                className="px-4"
+                variant="outline_primary"
+              >
+                Continuar como Médico
+              </Button>
             </div>
           </div>
           <div className="flex items-center justify-center flex-1">

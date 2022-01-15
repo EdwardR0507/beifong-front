@@ -4,6 +4,8 @@ export default function TextInput({
   register,
   name,
   type = "text",
+  min,
+  max,
   label,
   placeholder,
   errors,
@@ -32,6 +34,8 @@ export default function TextInput({
           id={name}
           type={typeInput}
           name={name}
+          min={min}
+          max={max}
           placeholder={placeholder || label}
           {...register(name)}
         />
