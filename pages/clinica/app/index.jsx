@@ -46,12 +46,22 @@ export default function ClinicApp() {
           <Button
             className="mt-4"
             onClick={() => {
-              router.push("/clinica/medicos")
+              router.push("/clinica/medicos/crear")
             }}
             size="large"
             variant="secondary"
           >
             Crear médicos
+          </Button>
+          <Button
+            className="mt-4"
+            onClick={() => {
+              router.push("/clinica/medicos")
+            }}
+            size="large"
+            variant="tertiary"
+          >
+            Listar médicos
           </Button>
         </section>
       </main>

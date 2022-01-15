@@ -4,7 +4,9 @@ const Desktop = ({ gridTemplate, headers }) => (
   >
     {headers.map((header) => (
       <div key={header.id} className="p-2">
-        <p className="grid text-gray-400 place-items-center">{header.name}</p>
+        <p className="grid text-gray-400 place-items-center text-center">
+          {header.name}
+        </p>
       </div>
     ))}
   </div>
