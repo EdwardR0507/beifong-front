@@ -1,5 +1,11 @@
 import SubscriptionCard from "components/SubscriptionCard"
 import { useRouter } from "next/router"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify"
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function Suscripciones() {
   let token
@@ -66,6 +72,9 @@ export default function Suscripciones() {
       )
       const json = res.json()
       console.log(json)
+      if(!json.ok){
+        toast.error(json.msg)
+      }
       router.push("/clinica/page-builder")
     } catch (error) {
       console.log(error)
@@ -118,6 +127,7 @@ export default function Suscripciones() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
           </SubscriptionCard>
         </section>
+        <ToastContainer />
       </main>
     </div>
   )

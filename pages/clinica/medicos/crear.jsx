@@ -9,6 +9,12 @@ import Logo from "ui/Logo"
 import SelectInput from "ui/SelectInput"
 import TextInput from "ui/TextInput"
 import * as yup from "yup"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify"
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 const schema = yup.object().shape({
   name: yup.string().required("El nombre es requerido"),
@@ -75,7 +81,9 @@ export default function CrearMedicos() {
         }
       )
       const data = await response.json()
-      console.log(data)
+      if(!data.ok){
+        toast.error(data.msg)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -190,6 +198,7 @@ export default function CrearMedicos() {
           </Button>
         </form>
       </main>
+      <ToastContainer />
     </div>
   )
 }

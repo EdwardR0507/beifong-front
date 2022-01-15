@@ -6,10 +6,15 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Button from "ui/Button"
 import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
-import Link from "ui/Link"
 import { loginSchema } from "schemas/login"
 import { useTheme } from "next-themes"
 import { useState, useEffect } from "react"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function LoginPaciente() {
   const {
@@ -69,7 +74,7 @@ export default function LoginPaciente() {
         window.localStorage.setItem("email", data.email)
         router.push("/medico/confirmation")
       } else {
-        console.log(json)
+        toast.error(json.error)
       }
     } catch (err) {
       console.log(err)
@@ -136,6 +141,7 @@ export default function LoginPaciente() {
         <ExampleUI.Box />
         <ExampleUI.Text />
       </div>
+      <ToastContainer />
     </main>
   )
 }

@@ -9,6 +9,12 @@ import Link from "ui/Link"
 import { loginSchema } from "schemas/login"
 import { useTheme } from "next-themes"
 import { signIn } from "next-auth/react"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify"
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function LoginPaciente() {
   const {
@@ -41,6 +47,9 @@ export default function LoginPaciente() {
         window.localStorage.setItem("token", JSON.stringify(json.token))
         router.push("/paciente/authPaciente")
       } else {
+        json.errors.map(error => {
+          toast.error(error.msg)
+        })
         console.log(json)
       }
     } catch (err) {
@@ -169,6 +178,7 @@ export default function LoginPaciente() {
         <ExampleUI.Box />
         <ExampleUI.Text />
       </div>
+      <ToastContainer />
     </main>
   )
 }

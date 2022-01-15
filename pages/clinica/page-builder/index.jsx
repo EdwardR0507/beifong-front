@@ -11,6 +11,12 @@ import RadioGroup from "ui/RadioGroup"
 import TextareaInput from "ui/TextareaInput"
 import TextInput from "ui/TextInput"
 import { daysToSpanish } from "utils/constants"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify"
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 const schema = yup.object().shape({
   logo: yup.mixed().required("El logo es requerido"),
@@ -117,6 +123,9 @@ export default function PageBuilder() {
           }
         )
         const data = await response.json()
+        if(!data.ok){
+          toast.error(data.msg)
+        }
         console.log(data)
       } catch (error) {
         console.log(error)
@@ -510,6 +519,7 @@ export default function PageBuilder() {
           />
         </svg>
       </Button>
+      <ToastContainer />
     </form>
   )
 }

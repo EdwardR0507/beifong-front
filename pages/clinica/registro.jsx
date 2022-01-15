@@ -9,6 +9,12 @@ import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { useTheme } from "next-themes"
 import { useState } from "react"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function RegistroClinica() {
   const {
@@ -37,11 +43,16 @@ export default function RegistroClinica() {
         }
       )
       const json = await res.json()
-      console.log(json)
+      //console.log(json)
       if (json.ok) {
         window.localStorage.setItem("clinicId", JSON.stringify(json.clinicId))
         window.localStorage.setItem("email", JSON.stringify(data.email))
         router.push("/clinica/confirmation")
+      }
+      else{
+        json.errors.map(error => {
+          toast.error(error.msg)
+        })
       }
     } catch (error) {
       console.log(error)
@@ -138,6 +149,7 @@ export default function RegistroClinica() {
           </p>
         </div>
       </div>
+      <ToastContainer />
     </main>
   )
 }

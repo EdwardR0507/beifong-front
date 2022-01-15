@@ -8,6 +8,12 @@ import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { patientRegisterSchema } from "schemas/cliente/registro"
 import { useTheme } from "next-themes"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify"
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function RegistroPaciente() {
   const {
@@ -34,6 +40,11 @@ export default function RegistroPaciente() {
       }
     )
     const json = await res.json()
+    if(!json.ok){
+      json.errors.map(error => 
+        toast.error(error.msg)
+      )
+    }
     console.log(json)
   }
 
@@ -109,6 +120,7 @@ export default function RegistroPaciente() {
         <ExampleUI.Box />
         <ExampleUI.Text />
       </div>
+      <ToastContainer />
     </main>
   )
 }

@@ -1,15 +1,16 @@
 import Image from "next/image"
 import { useForm } from "react-hook-form"
 import TextInput from "ui/TextInput"
-import SelectInput from "ui/SelectInput"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Button from "ui/Button"
-import ExampleUI from "ui/ExampleUI"
-import { useRouter } from "next/router"
-import Link from "ui/Link"
 import { actualizacionSchema } from "schemas/medico/actualizacion"
 import { useTheme } from "next-themes"
-import { useState, useEffect } from "react"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function ActualizarFecha(){
     const {
@@ -41,7 +42,14 @@ export default function ActualizarFecha(){
           }
         )
         .then(res => res.json())
-        .then(resJSON => console.log(resJSON))
+        .then(resJSON => {
+          if (resJSON.ok){
+            toast.success(resJSON.msg)
+          }
+          else{
+            toast.error(resJSON.msg)
+          }
+        })
         .catch(err => console.log(err))
     }
 
@@ -108,6 +116,7 @@ export default function ActualizarFecha(){
               </form>
             </div>
           </div>
+          <ToastContainer />
         </main>
       )
 }

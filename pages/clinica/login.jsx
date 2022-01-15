@@ -9,6 +9,12 @@ import Link from "ui/Link"
 import { loginSchema } from "schemas/login"
 import { useTheme } from "next-themes"
 import { useState } from "react"
+import { injectStyle } from "react-toastify/dist/inject-style";
+import { ToastContainer, toast } from "react-toastify";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function LoginClinica() {
   const {
@@ -41,9 +47,11 @@ export default function LoginClinica() {
       if (json.ok) {
         window.localStorage.setItem("token", JSON.stringify(json.token))
         router.push("/clinica/suscripciones")
-      } else {
-        console.log(json)
-        setError(json)
+      }
+      else{
+        json.errors.map(error => {
+          toast.error(error.msg)
+        })
       }
     } catch (error) {
       console.log(error)
@@ -133,6 +141,7 @@ export default function LoginClinica() {
         <ExampleUI.Box />
         <ExampleUI.Text />
       </div>
+      <ToastContainer />
     </main>
   )
 }
