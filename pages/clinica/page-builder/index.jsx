@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Button from "ui/Button"
 import Logo from "ui/Logo"
@@ -13,21 +13,25 @@ import TextInput from "ui/TextInput"
 import { daysToSpanish } from "utils/constants"
 
 const schema = yup.object().shape({
-  logo: yup.mixed().required("El logo es requerido"),
   slogan: yup.string().required("El slogan es requerido").min(15),
   subslogan: yup.string().required("El subslogan es requerido").min(25),
-  image1: yup.mixed().required("La imagen es requerida"),
-  // image1_position: yup.string().required("La posición es requerida"),
-  image2: yup.mixed().required("La imagen es requerida"),
-  // image2_position: yup.string().required("La posición es requerida"),
-  description1: yup.string().required("La descripción es requerida"),
-  description2: yup.string().required("La descripción es requerida"),
-  initial_day: yup.string().required("El día inicial es requerido"),
-  final_day: yup.string().required("El día final es requerido"),
+  startAttentionDay: yup.string().required("El día inicial es requerido"),
+  endAttentionDay: yup.string().required("El día final es requerido"),
   initial_hour: yup.string().required("La hora inicial es requerida"),
-  final_hour: yup.string().required("La hora final es requerida"),
   initial_minute: yup.string().required("El minuto inicial es requerido"),
+  final_hour: yup.string().required("La hora final es requerida"),
   final_minute: yup.string().required("El minuto final es requerido"),
+  img: yup.mixed().required("El logo es requerido"),
+  seccion: yup.array().of(
+    yup.object().shape({
+      imgPosition: yup
+        .string()
+        .required("La posición de la imagen es requerida"),
+      title: yup.string().required("El título es requerido"),
+      img: yup.mixed().required("La imagen es requerida"),
+      description: yup.string().required("La descripción es requerida"),
+    })
+  ),
 })
 
 export default function PageBuilder() {
@@ -36,6 +40,7 @@ export default function PageBuilder() {
   const {
     register,
     handleSubmit,
+    control,
     watch,
     setValue,
     formState: { errors },
@@ -43,67 +48,65 @@ export default function PageBuilder() {
     resolver: yupResolver(schema),
   })
 
-  const logo = watch("logo")
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "seccion",
+  })
+
+  const addSection = () => {
+    append({
+      imgPosition: "left",
+      title: "",
+      img: "",
+      description: "",
+    })
+  }
+
+  const removeSection = () => {
+    remove(fields.length - 1)
+  }
+
   const slogan = watch("slogan")
   const subslogan = watch("subslogan")
-  const title1 = watch("title1")
-  const image1 = watch("image1")
-  const image1Position = watch("image1_position")
-  const description1 = watch("description1")
-  const title2 = watch("title2")
-  const image2 = watch("image2")
-  const image2Position = watch("image2_position")
-  const description2 = watch("description2")
-  const initialDay = watch("initial_day")
-  const finalDay = watch("final_day")
+  const startAttentionDay = watch("startAttentionDay")
+  const endAttentionDay = watch("endAttentionDay")
   const initialHour = watch("initial_hour")
-  const finalHour = watch("final_hour")
   const initialMinute = watch("initial_minute")
+  const finalHour = watch("final_hour")
   const finalMinute = watch("final_minute")
-
-  console.log(image2Position, "image2Position")
+  const img = watch("img")
+  const seccion = watch("seccion")
 
   console.log(errors, "errors")
 
   const onSubmit = (data) => {
     const token = JSON.parse(window.localStorage.getItem("token"))
 
-    console.log(data, "data")
+    const formDataArray = data.seccion.map((section) => {
+      const formData = new FormData()
+      formData.append("imgPosition", section.imgPosition)
+      formData.append("title", section.title)
+      formData.append("description", section.description)
+      formData.append("img", section.img[0])
+      return formData
+    })
 
-    const section1 = {
-      title: data.title1,
-      description: data.description1,
-      img: data.image1[0],
-      imgPosition: data.image1_position,
-    }
-
-    const section2 = {
-      title: data.title2,
-      description: data.description2,
-      img: data.image2[0],
-      imgPosition: data.image2_position,
-    }
-
-    const information = {
-      slogan: data.slogan,
-      subslogan: data.subslogan,
-      startAttentionDay: data.initial_day,
-      endAttentionDay: data.final_day,
-      startAttentionTime: `${data.initial_hour}:${data.initial_minute}`,
-      endAttentionTime: `${data.final_hour}:${data.final_minute}`,
-      img: data.logo[0],
-    }
-
-    const updateClinicInfo = async (information) => {
+    const updateClinicInfo = async () => {
       const newFormdata = new FormData()
 
-      newFormdata.append("slogan", information.slogan)
-      newFormdata.append("subslogan", information.subslogan)
-      newFormdata.append("startAttentionDay", information.startAttentionDay)
-      newFormdata.append("endAttentionDay", information.endAttentionDay)
-      newFormdata.append("startAttentionTime", information.startAttentionTime)
-      newFormdata.append("endAttentionTime", information.endAttentionTime)
-      newFormdata.append("img", information.img)
+      newFormdata.append("slogan", data.slogan)
+      newFormdata.append("subslogan", data.subslogan)
+      newFormdata.append("startAttentionDay", data.startAttentionDay)
+      newFormdata.append("endAttentionDay", data.endAttentionDay)
+      newFormdata.append(
+        "startAttentionTime",
+        `${data.initial_hour}:${data.initial_minute}`
+      )
+      newFormdata.append(
+        "endAttentionTime",
+        `${data.final_hour}:${data.final_minute}`
+      )
+      newFormdata.append("img", data.img[0])
 
       try {
         const response = await fetch(
@@ -123,35 +126,27 @@ export default function PageBuilder() {
       }
     }
 
-    const updateSection = async (sectionData) => {
-      const newFormdata = new FormData()
-
-      newFormdata.append("title", sectionData.title)
-      newFormdata.append("description", sectionData.description)
-      newFormdata.append("img", sectionData.img)
-      newFormdata.append("imgPosition", sectionData.imgPosition)
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/section`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: newFormdata,
-          }
-        )
-        const data = await response.json()
-        console.log(data)
-      } catch (error) {
-        console.log(error)
-      }
+    const updateSection = (formData) => {
+      return fetch(
+        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/section`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+        })
     }
 
-    updateClinicInfo(information)
-    updateSection(section1)
-    updateSection(section2)
+    updateClinicInfo()
+    Promise.all(formDataArray.map(updateSection)).then(() => {
+      console.log("Secciones actualizadas")
+    })
   }
 
   return (
@@ -170,10 +165,10 @@ export default function PageBuilder() {
           <main className="flex flex-col text-slate-700 dark:text-white">
             <section className="h-screen px-4">
               <header className="flex items-center justify-between h-48">
-                {logo?.length > 0 && (
+                {img?.length > 0 && (
                   <figure className="relative w-1/4 h-full ml-10">
                     <Image
-                      src={URL.createObjectURL(logo[0])}
+                      src={URL.createObjectURL(img[0])}
                       alt="logo"
                       layout="fill"
                       objectFit="contain"
@@ -204,7 +199,8 @@ export default function PageBuilder() {
                         Días
                       </span>
                       <span className="ml-2">
-                        {daysToSpanish[initialDay]} a {daysToSpanish[finalDay]}
+                        {daysToSpanish[startAttentionDay]} a{" "}
+                        {daysToSpanish[endAttentionDay]}
                       </span>
                     </p>
                     <p className="flex justify-between w-full mb-6 text-xl font-semibold">
@@ -229,58 +225,71 @@ export default function PageBuilder() {
                 </article>
               </div>
             </section>
-            <section
-              className={`flex items-center h-screen px-10 justify-evenly bg-sky-300 dark:bg-sky-800 ${
-                image1Position === "right" ? "flex-row-reverse" : "flex-row"
-              }`}
-            >
-              {image1?.length > 0 && (
-                <figure className="relative w-5/12 h-full">
-                  <Image
-                    src={URL.createObjectURL(image1[0])}
-                    alt="logo"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </figure>
-              )}
-              <p className="flex flex-col items-center px-10 py-8 rounded-lg max-w-prose bg-sky-200 dark:bg-gray-800">
-                <span className="mb-6 text-xl font-semibold">
-                  <p className="flex items-center justify-center mb-10 text-2xl font-semibold">
-                    <span className="ml-2 text-4xl font-bold text-center uppercase">
-                      {title1}
+            {fields.map((field, index) => {
+              return (
+                <section
+                  key={field.id}
+                  className={`flex items-center h-screen px-10 justify-evenly ${
+                    index % 2 === 0
+                      ? "bg-sky-300 dark:bg-sky-800"
+                      : "bg-sky-50 dark:bg-gray-800"
+                  } ${
+                    seccion[index].imgPosition === "right"
+                      ? "flex-row-reverse"
+                      : "flex-row"
+                  }`}
+                >
+                  {seccion?.[index]?.img?.length > 0 && (
+                    <figure className="relative w-5/12 h-full">
+                      <Image
+                        src={URL.createObjectURL(seccion?.[index]?.img?.[0])}
+                        alt="logo"
+                        layout="fill"
+                        objectFit="contain"
+                      />
+                    </figure>
+                  )}
+                  <p
+                    className={`flex flex-col items-center px-10 py-8 rounded-lg max-w-prose ${
+                      index % 2 === 0
+                        ? "bg-sky-300 dark:bg-gray-800"
+                        : "bg-sky-200 dark:bg-sky-100 text-slate-700"
+                    }`}
+                  >
+                    <span className="mb-6 text-xl font-semibold">
+                      <p className="flex items-center justify-center mb-10 text-2xl font-semibold">
+                        <span className="ml-2 text-4xl font-bold text-center uppercase">
+                          {seccion[index].title}
+                        </span>
+                      </p>
+                      <span className="ml-2">{seccion[index].description}</span>
                     </span>
                   </p>
-                  <span className="ml-2">{description1}</span>
-                </span>
-              </p>
-            </section>
-            <section
-              className={`flex items-center h-screen px-10 justify-evenly bg-sky-50 dark:bg-gray-800 ${
-                image2Position === "right" ? "flex-row-reverse" : "flex-row"
-              }`}
-            >
-              {image2?.length > 0 && (
-                <figure className="relative w-5/12 h-full">
-                  <Image
-                    src={URL.createObjectURL(image2[0])}
-                    alt="logo"
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </figure>
-              )}
-              <p className="flex flex-col items-center px-10 py-8 rounded-lg max-w-prose bg-sky-200 dark:bg-sky-100 text-slate-700">
-                <span className="mb-6 text-xl font-semibold">
-                  <p className="flex items-center justify-center mb-10 text-2xl font-semibold">
-                    <span className="ml-2 text-4xl font-bold text-center uppercase">
-                      {title2}
-                    </span>
-                  </p>
-                  <span className="ml-2">{description2}</span>
-                </span>
-              </p>
-            </section>
+                </section>
+              )
+            })}
+            {showSideBar && (
+              <div className="flex flex-col items-center justify-center pr-60 py-14 md:flex-row">
+                <Button
+                  className="mb-4 h-max md:w-auto md:mr-8 md:mb-0"
+                  type="button"
+                  variant="secondary"
+                  onClick={addSection}
+                  disabled={fields.length > 7}
+                >
+                  Agregar +
+                </Button>
+                <Button
+                  className="mb-4 h-max md:w-auto md:mr-8 md:mb-0"
+                  type="button"
+                  variant="danger"
+                  onClick={removeSection}
+                  disabled={fields.length === 1}
+                >
+                  Quitar -
+                </Button>
+              </div>
+            )}
           </main>
         </div>
       </div>
@@ -299,11 +308,11 @@ export default function PageBuilder() {
                   Sección 1
                 </span>
                 <FileInput
-                  errors={errors.logo}
+                  errors={errors.img}
                   register={register}
                   label="Logo"
-                  name="logo"
-                  fileWatch={logo}
+                  name="img"
+                  fileWatch={img}
                 />
                 <TextareaInput
                   className="mt-4"
@@ -326,7 +335,7 @@ export default function PageBuilder() {
               </label>
               <div className="flex items-center">
                 <SelectInput
-                  name="initial_day"
+                  name="startAttentionDay"
                   options={[
                     { value: "Monday", label: "Lunes" },
                     { value: "Tuesday", label: "Martes" },
@@ -336,12 +345,12 @@ export default function PageBuilder() {
                     { value: "Saturday", label: "Sábado" },
                     { value: "Sunday", label: "Domingo" },
                   ]}
-                  {...register("initial_day")}
+                  {...register("startAttentionDay")}
                   noLabel
                 />
                 <span className="mx-2">a</span>
                 <SelectInput
-                  name="final_day"
+                  name="endAttentionDay"
                   options={[
                     { value: "Monday", label: "Lunes" },
                     { value: "Tuesday", label: "Martes" },
@@ -351,7 +360,7 @@ export default function PageBuilder() {
                     { value: "Saturday", label: "Sábado" },
                     { value: "Sunday", label: "Domingo" },
                   ]}
-                  {...register("final_day")}
+                  {...register("endAttentionDay")}
                   noLabel
                 />
               </div>
@@ -407,88 +416,63 @@ export default function PageBuilder() {
               </div>
             </div>
           </div>
-          <div className="h-screen border-b border-gray-700">
-            <div className="grid w-full gap-5 px-3 pt-6">
-              <div>
-                <span className="mb-6 ml-3 font-semibold text-gray-400">
-                  Sección 2
-                </span>
-                <TextInput
-                  label="Título"
-                  name="title1"
-                  placeholder="Título"
-                  register={register}
-                  errors={errors.title1}
-                  size="sm"
-                />
-                <FileInput
-                  errors={errors.image1}
-                  register={register}
-                  label="Imagen de sección 2"
-                  name="image1"
-                  fileWatch={image1}
-                />
+          {fields.map((field, index) => {
+            return (
+              <div key={field.id} className="h-screen border-b border-gray-700">
+                <div className="grid w-full gap-5 px-3 pt-6">
+                  <div>
+                    <span className="mb-6 ml-3 font-semibold text-gray-400">
+                      {"Sección " + (index + 2)}
+                    </span>
+                    <TextInput
+                      label={`Título ${index + 2}`}
+                      name={`seccion.${index}.title`}
+                      placeholder="Título"
+                      register={register}
+                      errors={
+                        errors?.seccion?.length >= index + 1 &&
+                        errors?.seccion[index]?.title
+                      }
+                      size="sm"
+                    />
+                    <FileInput
+                      errors={
+                        errors?.seccion?.length >= index + 1 &&
+                        errors?.seccion[index]?.img
+                      }
+                      register={register}
+                      label={`Imagen ${index + 2}`}
+                      name={`seccion.${index}.img`}
+                      fileWatch={seccion[index]?.img}
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
+                      {`Ubicación de la imagen ${index + 2}`}
+                    </label>
+                    <RadioGroup
+                      options={[
+                        { value: "left", name: "Izquierda" },
+                        { value: "right", name: "Derecha" },
+                      ]}
+                      setValue={(value) =>
+                        setValue(`seccion.${index}.imgPosition`, value)
+                      }
+                    />
+                  </div>
+                  <TextareaInput
+                    label={`Descripción ${index + 2}`}
+                    name={`seccion.${index}.description`}
+                    register={register}
+                    error={
+                      errors?.seccion?.length >= index + 1 &&
+                      errors?.seccion[index]?.description
+                    }
+                  />
+                </div>
               </div>
-              <div className="mt-3">
-                <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
-                  Ubicación de la imagen
-                </label>
-                <RadioGroup
-                  options={[
-                    { value: "left", name: "Izquierda" },
-                    { value: "right", name: "Derecha" },
-                  ]}
-                  setValue={(value) => setValue("image1_position", value)}
-                />
-              </div>
-              <TextareaInput
-                label="Descripción de sección 2"
-                name="description1"
-                register={register}
-                error={errors.description1}
-              />
-            </div>
-          </div>
-          <div className="h-screen border-b border-gray-700">
-            <div className="w-full px-3 mt-4">
-              <span className="mb-6 ml-3 font-semibold text-gray-400">
-                Sección 3
-              </span>
-              <TextInput
-                label="Título"
-                name="title2"
-                placeholder="Título"
-                register={register}
-                errors={errors.title2}
-                size="sm"
-              />
-              <FileInput
-                errors={errors.image2}
-                register={register}
-                label="Imagen de sección 3"
-                name="image2"
-                fileWatch={image2}
-              />
-              <div className="mt-3">
-                <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
-                  Ubicación de la imagen
-                </label>
-                <RadioGroup
-                  options={[
-                    { value: "left", name: "Izquierda" },
-                    { value: "right", name: "Derecha" },
-                  ]}
-                  setValue={(value) => setValue("image2_position", value)}
-                />
-              </div>
-              <TextareaInput
-                label="Descripción de sección 3"
-                name="description2"
-                register={register}
-                error={errors.description1}
-              />
-            </div>
-          </div>
+            )
+          })}
         </section>
       </aside>
       <Button
