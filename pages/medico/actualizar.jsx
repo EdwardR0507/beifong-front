@@ -16,10 +16,10 @@ export default function ActualizarFecha() {
     resolver: yupResolver(actualizacionSchema),
   })
   const router = useRouter()
-  const token = JSON.parse(window.localStorage.getItem("token"))
   const { theme } = useTheme()
 
   const onSubmit = (data) => {
+    const token = JSON.parse(window.localStorage.getItem("token"))
     const formData = new FormData()
     console.log(data)
     formData.append("attentionTime", data.attentionTime)
