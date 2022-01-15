@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
+import AccessibilityButton from "ui/Accessibility/Button"
 import Button from "ui/Button"
 
 export default function Modal({ children, type, isOpen, setIsOpen }) {
@@ -15,7 +16,7 @@ export default function Modal({ children, type, isOpen, setIsOpen }) {
     switch (type) {
       case "global":
         return (
-          <Button
+          <AccessibilityButton
             variant="secondary"
             type="button"
             size="large"
@@ -23,7 +24,7 @@ export default function Modal({ children, type, isOpen, setIsOpen }) {
             onClick={openModal}
           >
             Calculadora de accesibilidad
-          </Button>
+          </AccessibilityButton>
         )
       case "tryWidget":
         return (

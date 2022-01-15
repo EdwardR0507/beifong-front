@@ -46,6 +46,8 @@ export default function RegistroPaciente() {
       )
     }
     console.log(json)
+    window.localStorage.setItem("email", JSON.stringify(data.email))
+    router.push("/paciente/confirmation")
   }
 
   console.log(errors, "errors")

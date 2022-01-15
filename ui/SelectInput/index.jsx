@@ -46,9 +46,10 @@ const SelectInput = React.forwardRef(
             <option hidden value="">
               {placeholder || "Seleccione una opción"}
             </option>
+            {console.log(options)}
             {options.map((option, index) => (
-              <option key={index} value={option.value}>
-                {option.label}
+              <option key={index} label={option.label}>
+                {option.value}
               </option>
             ))}
           </select>

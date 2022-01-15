@@ -31,27 +31,25 @@ export default function LoginPaciente() {
   const [clinics, setClinics] = useState([])
 
   useEffect(() => {
-    const getClinics = fetch(
-      `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-    )
-    .then(res => res.json())
-    .then(resJSON => {
-      let clinicas = []
-      resJSON.clinics.map(clinica => {
-      clinicas.push({
-          label: clinica.name,
-          value: clinica.clinicId
-        })
+    window
+      .fetch(`${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      setClinics(clinicas)
-    })
-    .catch(err => console.log(err))
+      .then((res) => res.json())
+      .then(({ clinics }) => {
+        console.log(clinics)
+        const clinicas = clinics.map((clinica) => {
+          return {
+            label: clinica.name,
+            value: clinica.clinicId,
+          }
+        })
+        setClinics(clinicas)
+      })
+      .catch((err) => console.log(err))
   }, [])
 
   const onSubmit = async (data) => {
@@ -71,6 +69,7 @@ export default function LoginPaciente() {
       console.log(json)
       if (json.ok) {
         window.localStorage.setItem("token", JSON.stringify(json.token))
+        window.localStorage.setItem("medic", JSON.stringify(json.medic))
         window.localStorage.setItem("email", data.email)
         router.push("/medico/confirmation")
       } else {

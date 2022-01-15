@@ -45,7 +45,8 @@ export default function LoginPaciente() {
       console.log(json)
       if (json.ok) {
         window.localStorage.setItem("token", JSON.stringify(json.token))
-        router.push("/paciente/authPaciente")
+        window.localStorage.setItem("patient", JSON.stringify(json.patient))
+        router.push("/paciente/app")
       } else {
         json.errors.map(error => {
           toast.error(error.msg)

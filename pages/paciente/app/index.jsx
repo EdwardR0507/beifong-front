@@ -61,6 +61,26 @@ export default function PatientApp({ updateTooltip }) {
           >
             Cerrar sesión
           </AccessibilityButton>
+          <AccessibilityButton
+            className="mt-4"
+            onClick={() => {
+              router.push("/paciente/clinicas")
+            }}
+            size="large"
+            variant="primary"
+          >
+            Explorar clínicas
+          </AccessibilityButton>
+          <AccessibilityButton
+            className="mt-4"
+            onClick={() => {
+              router.push("/paciente/citas")
+            }}
+            size="large"
+            variant="secondary"
+          >
+            Mis citas
+          </AccessibilityButton>
         </section>
       </main>
     </div>
