@@ -10,12 +10,12 @@ import RadioGroup from "ui/RadioGroup"
 import TextareaInput from "ui/TextareaInput"
 import TextInput from "ui/TextInput"
 import { daysToSpanish } from "utils/constants"
-import { injectStyle } from "react-toastify/dist/inject-style";
+import { injectStyle } from "react-toastify/dist/inject-style"
 import { ToastContainer, toast } from "react-toastify"
 import AccessibilityButton from "ui/Accessibility/Button"
 
 if (typeof window !== "undefined") {
-  injectStyle();
+  injectStyle()
 }
 
 const schema = yup.object().shape({
@@ -126,7 +126,7 @@ export default function PageBuilder() {
           }
         )
         const data = await response.json()
-        if(!data.ok){
+        if (!data.ok) {
           toast.error(data.msg)
         }
         console.log(data)
@@ -342,9 +342,9 @@ export default function PageBuilder() {
               </div>
               <TextareaInput
                 label="Subeslogan"
-                name="subslogan"
+                name="subSlogan"
                 register={register}
-                error={errors.subslogan}
+                error={errors.subSlogan}
                 size="md"
               />
               <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">

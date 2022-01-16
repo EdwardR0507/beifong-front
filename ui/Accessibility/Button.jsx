@@ -75,7 +75,6 @@ export default function AccessibilityButton({
   ...rest
 }) {
   const { accessibility } = useUser()
-  console.log(accessibility, "accessibility")
 
   return (
     <button

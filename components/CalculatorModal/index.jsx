@@ -108,7 +108,7 @@ export default function CalculatorModal({ type }) {
           }
         )
         const json = await res.json()
-        console.log(json, "holi")
+        console.log(json, "json")
       } catch (error) {
         console.log(error)
       }
