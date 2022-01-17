@@ -41,9 +41,17 @@ export default function RegistroPaciente() {
     )
     const json = await res.json()
     if(!json.ok){
-      json.errors.map(error => 
-        toast.error(error.msg)
-      )
+      if (json.errors){
+        json.errors.forEach((error) => {
+          toast.error(error.msg)
+        })
+      }
+      else{
+        toast.error(json.msg)
+      }
+    }
+    else{
+      toast.success(json.msg)
     }
     console.log(json)
     window.localStorage.setItem("email", JSON.stringify(data.email))

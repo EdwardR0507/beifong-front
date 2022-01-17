@@ -48,11 +48,18 @@ export default function RegistroClinica() {
         window.localStorage.setItem("email", JSON.stringify(data.email))
         router.push("/clinica/confirmation")
       } else {
-        json.errors.forEach((error) => {
-          toast.error(error.msg)
-        })
+        console.log(json)
+        if (json.errors){
+          json.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(json.msg)
+        }
       }
     } catch (error) {
+      toast.error("Hubo un error, vuelva a intentarlo")
       console.log(error)
       setError(error)
     }

@@ -82,7 +82,17 @@ export default function CrearMedicos() {
       )
       const data = await response.json()
       if(!data.ok){
-        toast.error(data.msg)
+        if (data.errors){
+          data.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(data.msg)
+        }
+      }
+      else{
+        toast.success(data.msg)
       }
     } catch (error) {
       console.log(error)

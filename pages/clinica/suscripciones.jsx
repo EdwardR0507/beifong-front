@@ -36,10 +36,18 @@ export default function Suscripciones() {
       const json = res.json()
       console.log(json)
       if (!json.ok) {
-        toast.error(json.msg)
+        if (json.errors){
+          json.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(json.msg)
+        }
       }
       router.push("/clinica/app")
     } catch (error) {
+      toast.error("Hubo un error, vuelva a intentarlo")
       console.log(error)
     }
   }

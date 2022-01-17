@@ -48,12 +48,17 @@ export default function LoginPaciente() {
         window.localStorage.setItem("patient", JSON.stringify(json.patient))
         router.push("/paciente/app")
       } else {
-        json.errors.forEach((error) => {
-          toast.error(error.msg)
-        })
-        console.log(json)
+        if (json.errors){
+          json.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(json.msg)
+        }
       }
     } catch (err) {
+      toast.error(err)
       console.log(err)
     }
   }

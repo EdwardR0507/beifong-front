@@ -73,9 +73,17 @@ export default function LoginPaciente() {
         window.localStorage.setItem("email", data.email)
         router.push("/medico/confirmation")
       } else {
-        toast.error(json.error)
+        if (json.errors){
+          json.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(json.msg)
+        }
       }
     } catch (err) {
+      toast.error("Hubo un error, vuelva a intentarlo")
       console.log(err)
     }
   }

@@ -127,7 +127,17 @@ export default function PageBuilder() {
         )
         const data = await response.json()
         if (!data.ok) {
-          toast.error(data.msg)
+          if (data.errors){
+            data.errors.forEach((error) => {
+              toast.error(error.msg)
+            })
+          }
+          else{
+            print(json.msg)
+          }
+        }
+        else {
+          toast.success(data.msg)
         }
         console.log(data)
       } catch (error) {
@@ -148,8 +158,24 @@ export default function PageBuilder() {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
+          if(data.ok){
+            toast.success(data.msg)
+          }
+          else{
+            if (data.errors){
+              data.errors.forEach((error) => {
+                toast.error(error.msg)
+              })
+            }
+            else{
+              toast.error(data.msg)
+            }
+          }
         })
+        .catch((error => {
+          toast.error("Hubo un error, vuelva a intentar")
+          console.log(error)
+        }))
     }
 
     updateClinicInfo()

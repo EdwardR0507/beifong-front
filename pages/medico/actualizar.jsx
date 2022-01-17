@@ -45,10 +45,20 @@ export default function ActualizarFecha() {
         if (resJSON.ok) {
           toast.success(resJSON.msg)
         } else {
-          toast.error(resJSON.msg)
+          if (resJSON.errors){
+            resJSON.errors.forEach((error) => {
+              toast.error(error.msg)
+            })
+          }
+          else{
+            toast.error(resJSON.msg)
+          }
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        toast.error("Hubo un error, vuelva a intentarlo")
+        console.log(err)
+      })
   }
 
   return (

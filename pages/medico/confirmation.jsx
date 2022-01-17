@@ -2,6 +2,7 @@ import { useTheme } from "next-themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import Button from "ui/Button"
 
 export default function ClinicConfirmation() {
@@ -63,12 +64,21 @@ export default function ClinicConfirmation() {
       )
       const json = await res.json()
       if (json.ok) {
-        console.log(json)
+        toast.success(json.msg)
       } else {
         console.log(json)
+        if (json.errors){
+          json.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(json.msg)
+        }
         setError(json.errors)
       }
     } catch (error) {
+      toast.error("Hubo un error, vuelva a intentarlo")
       console.log(error)
       setError(error)
     }

@@ -49,12 +49,18 @@ export default function LoginClinica() {
         window.localStorage.setItem("clinic", JSON.stringify(json.clinic))
         router.push("/clinica/suscripciones")
       } else {
-        json.errors.forEach((error) => {
-          toast.error(error.msg)
-        })
+        if (json.errors){
+          json.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        }
+        else{
+          toast.error(json.msg)
+        }
         setError(json.errors)
       }
     } catch (error) {
+      toast.error("Hubo un error, vuelva a intentarlo")
       console.log(error)
     }
   }
