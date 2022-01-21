@@ -76,14 +76,14 @@ export default function PageBuilder() {
     const clinic = JSON.parse(window.localStorage.getItem("clinic"))
     setClinic(clinic)
     if (clinic) {
-      setValue("slogan", clinic.slogan)
-      setValue("subSlogan", clinic.subSlogan)
-      setValue("startAttentionDay", clinic.attentionDays.at(0))
-      setValue("endAttentionDay", clinic.attentionDays.at(-1))
-      setValue("initial_hour", clinic.startAttentionTime.split(":")[0])
-      setValue("initial_minute", clinic.startAttentionTime.split(":")[1])
-      setValue("final_hour", clinic.endAttentionTime.split(":")[0])
-      setValue("final_minute", clinic.endAttentionTime.split(":")[1])
+      setValue("slogan", clinic?.slogan)
+      setValue("subSlogan", clinic?.subSlogan)
+      setValue("startAttentionDay", clinic?.attentionDays.at(0))
+      setValue("endAttentionDay", clinic?.attentionDays.at(-1))
+      setValue("initial_hour", clinic?.startAttentionTime?.split(":")[0])
+      setValue("initial_minute", clinic?.startAttentionTime?.split(":")[1])
+      setValue("final_hour", clinic?.endAttentionTime?.split(":")[0])
+      setValue("final_minute", clinic?.endAttentionTime?.split(":")[1])
       setValue("img", clinic.logoImg)
       clinic.sections.forEach((section) => {
         append({
