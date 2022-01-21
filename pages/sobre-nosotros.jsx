@@ -72,12 +72,12 @@ export default function SobreNosotros() {
         </h1>
       </div>
       <main className="grid flex-1 w-full grid-cols-3 px-10 py-8 font-semibold gap-x-8 bg-sky-50 dark:bg-gray-800">
-        <AboutUsCard fileImage="arian.jpg" />
-        <AboutUsCard fileImage="edward.jpg" />
-        <AboutUsCard fileImage="elian.png" />
-        <AboutUsCard fileImage="railly.png" />
         <AboutUsCard fileImage="leonardo.jpg" />
+        <AboutUsCard fileImage="railly.png" />
         <AboutUsCard fileImage="default.png" />
+        <AboutUsCard fileImage="edward.jpg" />
+        <AboutUsCard fileImage="arian.jpg" />
+        <AboutUsCard fileImage="elian.png" />
       </main>
     </div>
   )

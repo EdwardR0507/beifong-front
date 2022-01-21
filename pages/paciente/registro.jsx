@@ -3,16 +3,16 @@ import { useForm } from "react-hook-form"
 import TextInput from "ui/TextInput"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Button from "ui/Button"
-import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { patientRegisterSchema } from "schemas/cliente/registro"
 import { useTheme } from "next-themes"
-import { injectStyle } from "react-toastify/dist/inject-style";
+import { injectStyle } from "react-toastify/dist/inject-style"
 import { ToastContainer, toast } from "react-toastify"
+import CalculatorModal from "components/CalculatorModal"
 
 if (typeof window !== "undefined") {
-  injectStyle();
+  injectStyle()
 }
 
 export default function RegistroPaciente() {
@@ -40,17 +40,15 @@ export default function RegistroPaciente() {
       }
     )
     const json = await res.json()
-    if(!json.ok){
-      if (json.errors){
+    if (!json.ok) {
+      if (json.errors) {
         json.errors.forEach((error) => {
           toast.error(error.msg)
         })
-      }
-      else{
+      } else {
         toast.error(json.msg)
       }
-    }
-    else{
+    } else {
       toast.success(json.msg)
     }
     console.log(json)
@@ -127,8 +125,7 @@ export default function RegistroPaciente() {
         </div>
       </div>
       <div className="flex-col items-center justify-center flex-1 hidden w-full p-4 md:flex bg-sky-500 dark:bg-sky-700">
-        <ExampleUI.Box />
-        <ExampleUI.Text />
+        <CalculatorModal type="home" />
       </div>
       <ToastContainer />
     </main>

@@ -147,7 +147,9 @@ export default function ActualizarFecha() {
                 disabled={specialty === ""}
                 options={
                   medics
-                    .filter((medic) => medic.specialty === specialty)
+                    .filter(
+                      (medic) => medic.specialty === specialty && medic.verified
+                    )
                     .map((medic) => ({
                       value: medic.medicId,
                       label: `${medic.name} ${medic.surname}`,

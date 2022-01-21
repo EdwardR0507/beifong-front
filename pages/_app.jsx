@@ -23,7 +23,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           ) : (
             <Component {...pageProps} />
           )}
-          <CalculatorModal type="global" />
+          {router.pathname !== "/" &&
+            !router.pathname.includes("login") &&
+            !router.pathname.includes("registro") && (
+              <CalculatorModal type="global" />
+            )}
         </ThemeProvider>
       </UserProvider>
     </SessionProvider>

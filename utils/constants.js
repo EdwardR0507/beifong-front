@@ -65,10 +65,6 @@ export const appointmentClinicHeaders = [
     id: 6,
     name: "Fecha",
   },
-  {
-    id: 7,
-    name: "Acciones",
-  },
 ]
 
 // Clinics
@@ -386,7 +382,7 @@ export const medicHeaders = [
   },
   {
     id: 7,
-    name: "Acciones",
+    name: "Estado",
   },
 ]
 

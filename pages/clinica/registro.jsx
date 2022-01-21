@@ -4,13 +4,13 @@ import TextInput from "ui/TextInput"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import { clinicRegisterSchema } from "schemas/clinica/registro"
 import Button from "ui/Button"
-import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
 import Link from "ui/Link"
 import { useTheme } from "next-themes"
 import { useState } from "react"
 import { injectStyle } from "react-toastify/dist/inject-style"
 import { ToastContainer, toast } from "react-toastify"
+import CalculatorModal from "components/CalculatorModal"
 
 if (typeof window !== "undefined") {
   injectStyle()
@@ -49,12 +49,11 @@ export default function RegistroClinica() {
         router.push("/clinica/confirmation")
       } else {
         console.log(json)
-        if (json.errors){
+        if (json.errors) {
           json.errors.forEach((error) => {
             toast.error(error.msg)
           })
-        }
-        else{
+        } else {
           toast.error(json.msg)
         }
       }
@@ -136,23 +135,22 @@ export default function RegistroClinica() {
               </div>
             )}
           </form>
+          <div className="py-6 mt-10 bg-white rounded shadow-lg px-14 dark:bg-gray-700">
+            <p className="w-full mb-4 font-medium text-center text-gray-700 dark:text-gray-100">
+              ¿Ya tienes una clínica registrada?{" "}
+              <Link to="/clinica/login">Iniciar Sesión</Link>
+            </p>
+            <p className="w-full font-medium text-center text-gray-700 dark:text-gray-100">
+              ¿Eres un paciente?{" "}
+              <Link to="/paciente/registro" variant="secondary">
+                Registrarse como paciente
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
       <div className="flex-col items-center justify-center flex-1 hidden w-full p-4 md:flex bg-sky-500 dark:bg-sky-700">
-        <ExampleUI.Box />
-        <ExampleUI.Text />
-        <div className="py-6 mt-10 bg-white rounded shadow-lg px-14 dark:bg-gray-700">
-          <p className="w-full mb-4 font-medium text-center text-gray-700 dark:text-gray-100">
-            ¿Ya tienes una clínica registrada?{" "}
-            <Link to="/clinica/login">Iniciar Sesión</Link>
-          </p>
-          <p className="w-full font-medium text-center text-gray-700 dark:text-gray-100">
-            ¿Eres un paciente?{" "}
-            <Link to="/paciente/registro" variant="secondary">
-              Registrarse como paciente
-            </Link>
-          </p>
-        </div>
+        <CalculatorModal type="home" />
       </div>
       <ToastContainer />
     </main>

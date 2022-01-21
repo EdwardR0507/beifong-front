@@ -17,7 +17,7 @@ export default function PatientApp({ updateTooltip }) {
       <TableData
         updateTooltip={updateTooltip}
         type="Clínicas"
-        data={clinics}
+        data={clinics?.filter((clinic) => clinic?.verified)}
         gridTemplateHeader="grid-cols-5"
         headerType={clinicHeaders}
       />

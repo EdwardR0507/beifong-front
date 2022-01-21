@@ -1,7 +1,6 @@
 import Headers from "components/Headers"
 import { useEffect, useState } from "react"
 import Span from "ui/Accessibility/Span"
-import Button from "ui/Button"
 import { appointmentClinicHeaders } from "utils/constants"
 
 export default function CitaClinicaRow({ data: appointment }) {
@@ -52,7 +51,7 @@ export default function CitaClinicaRow({ data: appointment }) {
   return (
     <section className="grid grid-cols-2 mt-8 rounded md:mt-0 md:grid-cols-1">
       <Headers.Mobile headers={appointmentClinicHeaders} />
-      <div className="grid text-sm text-right bg-gray-100 dark:bg-gray-700 md:border-b md:grid-cols-6 md:text-center">
+      <div className="grid text-sm text-right bg-gray-100 dark:bg-gray-700 md:border-b md:grid-cols-5 md:text-center">
         <Span className="flex items-center justify-end h-16 px-4 break-words border-b md:text-left md:justify-center md:h-20 md:border-none">
           {patientInfo?.name}
         </Span>
@@ -70,12 +69,6 @@ export default function CitaClinicaRow({ data: appointment }) {
             timeZone: "UTC",
           })}
         </Span>
-        <div className="flex items-center justify-end h-16 pr-4 border-b md:flex-col md:justify-center md:h-20 md:border-none">
-          <Button variant="primary" className="flex" onClick={() => {}}>
-            <span className="material-icons">edit</span>
-            <Span className="ml-2">Editar</Span>
-          </Button>
-        </div>
       </div>
     </section>
   )

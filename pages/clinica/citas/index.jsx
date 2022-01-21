@@ -33,7 +33,7 @@ export default function AllAppointments({ updateTooltip }) {
         updateTooltip={updateTooltip}
         type="Citas de clínica"
         data={appointments}
-        gridTemplateHeader="grid-cols-6"
+        gridTemplateHeader="grid-cols-5"
         headerType={appointmentClinicHeaders}
       />
     )

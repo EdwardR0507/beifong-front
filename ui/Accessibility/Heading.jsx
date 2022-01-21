@@ -39,8 +39,6 @@ function H2({ className, fontSize = "base", example, children }) {
     ? sizeH2[fontSize]
     : sizeH2[accessibility?.fontSize]
 
-  console.log(fontStyles)
-
   return <h2 className={`font-bold ${className} ${fontStyles}`}>{children}</h2>
 }
 

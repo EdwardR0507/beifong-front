@@ -4,16 +4,16 @@ import TextInput from "ui/TextInput"
 import SelectInput from "ui/SelectInput"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Button from "ui/Button"
-import ExampleUI from "ui/ExampleUI"
 import { useRouter } from "next/router"
 import { loginSchema } from "schemas/login"
 import { useTheme } from "next-themes"
 import { useState, useEffect } from "react"
-import { injectStyle } from "react-toastify/dist/inject-style";
-import { ToastContainer, toast } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style"
+import { ToastContainer, toast } from "react-toastify"
+import CalculatorModal from "components/CalculatorModal"
 
 if (typeof window !== "undefined") {
-  injectStyle();
+  injectStyle()
 }
 
 export default function LoginPaciente() {
@@ -73,12 +73,11 @@ export default function LoginPaciente() {
         window.localStorage.setItem("email", data.email)
         router.push("/medico/confirmation")
       } else {
-        if (json.errors){
+        if (json.errors) {
           json.errors.forEach((error) => {
             toast.error(error.msg)
           })
-        }
-        else{
+        } else {
           toast.error(json.msg)
         }
       }
@@ -145,8 +144,7 @@ export default function LoginPaciente() {
         </div>
       </div>
       <div className="flex-col items-center justify-center flex-1 hidden w-full p-4 md:flex bg-sky-500 dark:bg-sky-700">
-        <ExampleUI.Box />
-        <ExampleUI.Text />
+        <CalculatorModal type="home" />
       </div>
       <ToastContainer />
     </main>
