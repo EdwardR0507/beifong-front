@@ -71,7 +71,11 @@ export default function LoginPaciente() {
         window.localStorage.setItem("token", JSON.stringify(json.token))
         window.localStorage.setItem("medic", JSON.stringify(json.medic))
         window.localStorage.setItem("email", data.email)
-        router.push("/medico/confirmation")
+        if (json.medic.verified) {
+          router.push("/medico/app")
+        } else {
+          router.push("/medico/confirmation")
+        }
       } else {
         if (json.errors) {
           json.errors.forEach((error) => {

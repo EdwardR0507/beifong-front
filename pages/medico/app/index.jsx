@@ -26,6 +26,7 @@ export default function MedicApp() {
           <Button
             onClick={() => {
               window.localStorage.removeItem("token")
+              window.localStorage.removeItem("medic")
               router.push("/medico/login")
             }}
             size="large"

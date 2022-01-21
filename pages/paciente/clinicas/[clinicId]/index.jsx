@@ -25,7 +25,7 @@ export default function ClinicCustomPage() {
         console.log(clinic)
         const data = {
           slogan: clinic.slogan,
-          subeslogan: clinic.subeslogan,
+          subSlogan: clinic.subSlogan,
           startAttentionDay: clinic.attentionDays[0],
           endAttentionDay: clinic.attentionDays[1],
           startAttentionTime: clinic.startAttentionTime,
@@ -66,7 +66,7 @@ export default function ClinicCustomPage() {
                 {template?.slogan}
               </span>
               <span className="my-6 text-xl font-semibold">
-                {template?.subslogan}
+                {template?.subSlogan}
               </span>
               <Button
                 onClick={() => {

@@ -101,37 +101,37 @@ export default function Suscripciones() {
             type="Mensual"
             price="S/. 179"
             features={[
-              "Lorem ipsum dolor sit amet",
-              "Lorem ipsum dolor sit amet",
-              "Lorem ipsum dolor sit amet",
+              "Solo 1 cuenta de administración",
+              "150 consultas por mes (máximo)",
+              "10 consultas por día (máximo)",
             ]}
             handleSubmit={() => onSubmit("179.00", "monthly")}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+            Esta suscripción incluye:
           </SubscriptionCard>
           <SubscriptionCard
             type="Anual"
             price="S/. 399"
             features={[
-              "Lorem ipsum dolor sit amet",
-              "Lorem ipsum dolor sit amet",
-              "Lorem ipsum dolor sit amet",
+              "5 cuentas de administración",
+              "Consultads personalizadas por año",
+              "Consultas ilimitadas por día",
             ]}
             handleSubmit={() => onSubmit("399.00", "annual")}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+            Esta suscripción incluye:
           </SubscriptionCard>
           <SubscriptionCard
             type="Semestral"
             price="S/. 249"
             features={[
-              "Lorem ipsum dolor sit amet",
-              "Lorem ipsum dolor sit amet",
-              "Lorem ipsum dolor sit amet",
+              "2 cuentas de administración",
+              "Consultas ilimitadas por mes",
+              "Atención personalizada por semestre",
             ]}
             handleSubmit={() => onSubmit("249.00", "semi-annual")}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+            Esta suscripción incluye:
           </SubscriptionCard>
         </section>
       </main>

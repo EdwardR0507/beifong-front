@@ -67,12 +67,11 @@ export default function ClinicConfirmation() {
         toast.success(json.msg)
       } else {
         console.log(json)
-        if (json.errors){
+        if (json.errors) {
           json.errors.forEach((error) => {
             toast.error(error.msg)
           })
-        }
-        else{
+        } else {
           toast.error(json.msg)
         }
         setError(json.errors)

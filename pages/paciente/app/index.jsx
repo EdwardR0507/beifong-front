@@ -54,6 +54,7 @@ export default function PatientApp({ updateTooltip }) {
           <AccessibilityButton
             onClick={() => {
               window.localStorage.removeItem("token")
+              window.localStorage.removeItem("patient")
               router.push("/paciente/login")
             }}
             size="large"

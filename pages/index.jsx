@@ -110,7 +110,7 @@ export default function Home() {
                 </AccessibilityButton>
                 <AccessibilityButton
                   onClick={() => {
-                    router.push("/clinica/registro")
+                    router.push("/paciente/registro")
                   }}
                   className="px-4"
                   variant="secondary"
