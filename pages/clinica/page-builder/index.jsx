@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup"
 import Logo from "ui/Logo"
@@ -42,14 +42,14 @@ const schema = yup.object().shape({
 
 export default function PageBuilder() {
   const [showSideBar, setShowSideBar] = useState(true)
+  const [clinic, setClinic] = useState(null)
 
   const {
     register,
-    handleSubmit,
     control,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     resolver: yupResolver(schema),
   })
@@ -72,6 +72,43 @@ export default function PageBuilder() {
     remove(fields.length - 1)
   }
 
+  useEffect(() => {
+    const clinic = JSON.parse(window.localStorage.getItem("clinic"))
+    setClinic(clinic)
+    if (clinic) {
+      setValue("slogan", clinic.slogan)
+      setValue("subSlogan", clinic.subSlogan)
+      setValue("startAttentionDay", clinic.attentionDays.at(0))
+      setValue("endAttentionDay", clinic.attentionDays.at(-1))
+      setValue("initial_hour", clinic.startAttentionTime.split(":")[0])
+      setValue("initial_minute", clinic.startAttentionTime.split(":")[1])
+      setValue("final_hour", clinic.endAttentionTime.split(":")[0])
+      setValue("final_minute", clinic.endAttentionTime.split(":")[1])
+      setValue("img", clinic.logoImg)
+      clinic.sections.forEach((section) => {
+        append({
+          imgPosition: section.imgPosition,
+          title: section.title,
+          img: section.img,
+          description: section.description,
+        })
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isDirty) {
+      window.addEventListener("beforeunload", (e) => {
+        e.returnValue = "¿Estás seguro de que quieres salir?"
+      })
+      return () => {
+        window.removeEventListener("beforeunload", (e) => {
+          e.returnValue = "¿Estás seguro de que quieres salir?"
+        })
+      }
+    }
+  }, [isDirty])
+
   const slogan = watch("slogan")
   const subSlogan = watch("subSlogan")
   const startAttentionDay = watch("startAttentionDay")
@@ -85,115 +122,86 @@ export default function PageBuilder() {
 
   console.log(errors, "errors")
 
-  const onSubmit = (data) => {
+  const updateClinicInfo = async () => {
     const token = JSON.parse(window.localStorage.getItem("token"))
+    const newFormdata = new FormData()
 
-    const formDataArray = data.seccion.map((section) => {
-      const formData = new FormData()
-      formData.append("imgPosition", section.imgPosition)
-      formData.append("title", section.title)
-      formData.append("description", section.description)
-      formData.append("img", section.img[0])
-      return formData
-    })
+    newFormdata.append("slogan", slogan)
+    newFormdata.append("subSlogan", subSlogan)
+    newFormdata.append("startAttentionDay", startAttentionDay)
+    newFormdata.append("endAttentionDay", endAttentionDay)
+    newFormdata.append("startAttentionTime", `${initialHour}:${initialMinute}`)
+    newFormdata.append("endAttentionTime", `${finalHour}:${finalMinute}`)
+    newFormdata.append("img", img[0])
 
-    const updateClinicInfo = async () => {
-      const newFormdata = new FormData()
-
-      newFormdata.append("slogan", data.slogan)
-      newFormdata.append("subSlogan", data.subSlogan)
-      newFormdata.append("startAttentionDay", data.startAttentionDay)
-      newFormdata.append("endAttentionDay", data.endAttentionDay)
-      newFormdata.append(
-        "startAttentionTime",
-        `${data.initial_hour}:${data.initial_minute}`
-      )
-      newFormdata.append(
-        "endAttentionTime",
-        `${data.final_hour}:${data.final_minute}`
-      )
-      newFormdata.append("img", data.img[0])
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/information`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: newFormdata,
-          }
-        )
-        const data = await response.json()
-        if (!data.ok) {
-          if (data.errors){
-            data.errors.forEach((error) => {
-              toast.error(error.msg)
-            })
-          }
-          else{
-            print(json.msg)
-          }
-        }
-        else {
-          toast.success(data.msg)
-        }
-        console.log(data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    const updateSection = (formData) => {
-      return fetch(
-        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/section`,
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/information`,
         {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: formData,
+          body: newFormdata,
         }
       )
-        .then((response) => response.json())
-        .then((data) => {
-          if(data.ok){
-            toast.success(data.msg)
-          }
-          else{
-            if (data.errors){
-              data.errors.forEach((error) => {
-                toast.error(error.msg)
-              })
-            }
-            else{
-              toast.error(data.msg)
-            }
-          }
-        })
-        .catch((error => {
-          toast.error("Hubo un error, vuelva a intentar")
-          console.log(error)
-        }))
+      const data = await response.json()
+      if (!data.ok) {
+        if (data.errors) {
+          data.errors.forEach((error) => {
+            toast.error(error.msg)
+          })
+        } else {
+          toast.error("Error al actualizar la información")
+        }
+      } else {
+        toast.success(data.msg)
+      }
+      console.log(data)
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    updateClinicInfo()
-    Promise.all(formDataArray.map(updateSection)).then(() => {
-      console.log("Secciones actualizadas")
-    })
+  const updateSection = (index) => {
+    const token = JSON.parse(window.localStorage.getItem("token"))
+
+    const newFormdata = new FormData()
+    newFormdata.append("imgPosition", seccion[index].imgPosition)
+    newFormdata.append("title", seccion[index].title)
+    newFormdata.append("img", seccion[index].img[0])
+    newFormdata.append("description", seccion[index].description)
+
+    window
+      .fetch(`${process.env.NEXT_PUBLIC_BEIFONG_API_URL}/api/clinics/section`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: newFormdata,
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.ok) {
+          toast.success(data.msg)
+        } else {
+          if (data.errors) {
+            data.errors.forEach((error) => {
+              toast.error(error.msg)
+            })
+          } else {
+            toast.error(data.msg)
+          }
+        }
+      })
+      .catch((error) => {
+        toast.error("Hubo un error, vuelva a intentar")
+        console.log(error)
+      })
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="relative flex flex-col bg-sky-50 dark:bg-gray-800"
-    >
-      <div className="fixed z-10 bg-white rounded-lg bottom-28 right-10 w-max dark:bg-gray-800">
-        <AccessibilityButton variant="tertiary">
-          Guardar Datos
-        </AccessibilityButton>
-      </div>
+    <section className="relative flex flex-col bg-sky-50 dark:bg-gray-800">
       <div className="absolute flex w-full min-h-screen bg-sky-50 dark:bg-gray-800">
         {showSideBar && (
           <aside className="w-1/4 min-h-screen bg-sky-50 dark:bg-gray-800"></aside>
@@ -202,10 +210,15 @@ export default function PageBuilder() {
           <main className="flex flex-col text-slate-700 dark:text-white">
             <section className="h-screen px-4">
               <header className="flex items-center justify-between h-48">
+                {console.log(img, "img")}
                 {img?.length > 0 && (
                   <figure className="relative w-1/4 h-full ml-10">
                     <Image
-                      src={URL.createObjectURL(img[0])}
+                      src={
+                        typeof img?.[0] !== "string"
+                          ? URL.createObjectURL(img[0])
+                          : img
+                      }
                       alt="logo"
                       layout="fill"
                       objectFit="contain"
@@ -256,7 +269,9 @@ export default function PageBuilder() {
                       <span className="font-semibold text-gray-400 dark:text-gray-500">
                         Teléfono
                       </span>
-                      <span className="ml-2">+51 999 999 999</span>
+                      <span className="ml-2">
+                        {clinic && clinic?.telephone}
+                      </span>
                     </p>
                     <AccessibilityButton
                       className="w-2/4 mt-4"
@@ -285,7 +300,11 @@ export default function PageBuilder() {
                   {seccion?.[index]?.img?.length > 0 && (
                     <figure className="relative w-5/12 h-full">
                       <Image
-                        src={URL.createObjectURL(seccion?.[index]?.img?.[0])}
+                        src={
+                          typeof seccion?.[index]?.img?.[0] !== "string"
+                            ? URL.createObjectURL(seccion?.[index]?.img?.[0])
+                            : seccion?.[index]?.img
+                        }
                         alt="logo"
                         layout="fill"
                         objectFit="contain"
@@ -318,7 +337,7 @@ export default function PageBuilder() {
                   type="button"
                   variant="secondary"
                   onClick={addSection}
-                  disabled={fields.length > 7}
+                  disabled={fields.length > 20}
                 >
                   Agregar +
                 </AccessibilityButton>
@@ -373,7 +392,7 @@ export default function PageBuilder() {
                 error={errors.subSlogan}
                 size="md"
               />
-              <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
+              <label className="flex items-center px-3 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
                 Días de atención
               </label>
               <div className="flex items-center">
@@ -407,7 +426,7 @@ export default function PageBuilder() {
                   noLabel
                 />
               </div>
-              <div className="mt-3">
+              <div className="my-3">
                 <label className="flex items-center px-3 py-2 text-xs font-bold text-gray-700 uppercase select-none dark:text-gray-100">
                   Horario de atención
                 </label>
@@ -457,6 +476,13 @@ export default function PageBuilder() {
                   />
                 </div>
               </div>
+              <AccessibilityButton
+                type="submit"
+                onClick={updateClinicInfo}
+                variant="tertiary"
+              >
+                Guardar Datos
+              </AccessibilityButton>
             </div>
           </div>
           {fields.map((field, index) => {
@@ -512,6 +538,15 @@ export default function PageBuilder() {
                       errors?.seccion[index]?.description
                     }
                   />
+                  {console.log(clinic?.sections?.length)}
+                  <AccessibilityButton
+                    type="button"
+                    onClick={() => updateSection(index)}
+                    disabled={clinic?.sections?.length > index}
+                    variant="tertiary"
+                  >
+                    Guardar Datos
+                  </AccessibilityButton>
                 </div>
               </div>
             )
@@ -519,6 +554,7 @@ export default function PageBuilder() {
         </section>
       </aside>
       <AccessibilityButton
+        type="button"
         variant="primary"
         className="fixed top-0 right-0 mt-4 mr-4"
         onClick={() => setShowSideBar(!showSideBar)}
@@ -539,6 +575,6 @@ export default function PageBuilder() {
         </svg>
       </AccessibilityButton>
       <ToastContainer />
-    </form>
+    </section>
   )
 }

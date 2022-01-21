@@ -10,7 +10,7 @@ const styles = {
   secondary:
     "bg-emerald-500 text-white shadow-lg hover:shadow-emerald-800/50 shadow-emerald-500/40 hover:bg-emerald-700",
   tertiary:
-    "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700",
+    "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700 disabled:bg-pink-200",
   quaternary:
     "bg-orange-400 text-white shadow-lg hover:shadow-orange-700/50 shadow-orange-400/40 hover:bg-orange-600",
   danger:
@@ -40,7 +40,7 @@ const deuteranopiaProtanopia = {
   secondary:
     "bg-lime-500 text-white shadow-lg hover:shadow-lime-800/50 shadow-lime-500/40 hover:bg-lime-700",
   tertiary:
-    "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700",
+    "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700 disabled:bg-pink-300 disabled:hover:shadow-pink-500/40",
   quaternary:
     "bg-yellow-500 text-white shadow-lg hover:shadow-yellow-800/50 shadow-yellow-500/40 hover:bg-yellow-700",
   danger:
@@ -56,7 +56,7 @@ const tritanopia = {
   secondary:
     "bg-emerald-500 text-white shadow-lg hover:shadow-emerald-800/50 shadow-emerald-500/40 hover:bg-emerald-700",
   tertiary:
-    "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700",
+    "bg-pink-500 text-white shadow-lg hover:shadow-pink-800/50 shadow-pink-500/40 hover:bg-pink-700 disabled:bg-pink-300",
   quaternary:
     "bg-orange-400 text-white shadow-lg hover:shadow-orange-700/50 shadow-orange-400/40 hover:bg-orange-600",
   danger:
