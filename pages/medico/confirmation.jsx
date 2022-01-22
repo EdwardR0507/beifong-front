@@ -31,7 +31,7 @@ export default function ClinicConfirmation() {
         const json = await res.json()
         if (json.ok) {
           window.localStorage.setItem("token", JSON.stringify(json.token))
-          router.push("/medico/app")
+          router.push("/medico/login")
         } else {
           console.log(json)
           setError(json)
