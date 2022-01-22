@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 import SelectInput from "ui/SelectInput"
 import { useEffect, useState } from "react"
 import * as yup from "yup"
+import { toast, ToastContainer } from "react-toastify"
 
 const schema = yup.object().shape({
   specialty: yup.string().required("Especialidad es requerida"),
@@ -60,8 +61,23 @@ export default function ActualizarFecha() {
         }
       )
       .then((res) => res.json())
-      .then((resJSON) => console.log(resJSON))
-      .catch((err) => console.log(err))
+      .then((resJSON) => {
+        if (resJSON.ok) {
+          toast.success(resJSON.msg)
+        } else {
+          if (resJSON.errors) {
+            resJSON.errors.forEach((error) => {
+              toast.error(error.msg)
+            })
+          } else {
+            toast.error(resJSON.msg)
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error("Error al crear cita")
+      })
   }
 
   useEffect(() => {
@@ -170,6 +186,7 @@ export default function ActualizarFecha() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </main>
   )
 }
