@@ -182,12 +182,6 @@ export default function CalculatorModal({ type }) {
                       label="Texto resaltado"
                       iconName="highlight"
                     />
-                    <AccessibilityButton
-                      isActive={isHighContrast}
-                      onClick={() => setIsHighContrast(!isHighContrast)}
-                      label="Contraste alto"
-                      iconName="contrast"
-                    />
                   </div>
                 </div>
               </div>
@@ -325,12 +319,6 @@ export default function CalculatorModal({ type }) {
                         onClick={() => setIsHighlighted(!isHighlighted)}
                         label="Texto resaltado"
                         iconName="highlight"
-                      />
-                      <AccessibilityButton
-                        isActive={isHighContrast}
-                        onClick={() => setIsHighContrast(!isHighContrast)}
-                        label="Contraste alto"
-                        iconName="contrast"
                       />
                     </div>
                   </div>
